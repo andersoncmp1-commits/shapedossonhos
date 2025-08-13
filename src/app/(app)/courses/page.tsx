@@ -12,7 +12,7 @@ export default function CoursesPage() {
       description: 'Um guia completo para você viver intensamente a Quaresma de São Miguel Arcanjo.',
       imageUrl: 'https://quaresmasaomiguel.primefocus.com.br/wp-content/uploads/2025/08/ChatGPT-Image-Aug-12-2025-11_21_25-PM.png',
       imageHint: 'archangel michael',
-      modulesCount: 5,
+      modulesCount: 7,
       href: '/dashboard', 
     },
     // Adicione mais cursos aqui no futuro
@@ -25,31 +25,33 @@ export default function CoursesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {courses.map((course) => (
-          <Card key={course.id} className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1">
-            <CardHeader className="p-0">
-               <Image 
-                src={course.imageUrl} 
-                alt={`Capa do curso ${course.title}`}
-                width={600}
-                height={400}
-                className="object-cover w-full h-48"
-                data-ai-hint={course.imageHint}
-                />
-            </CardHeader>
-            <CardContent className="p-6 flex flex-col flex-grow">
-              <CardTitle className="font-headline mb-2">{course.title}</CardTitle>
-              <CardDescription className="font-display mb-4 flex-grow">{course.description}</CardDescription>
-              <div className="text-sm text-muted-foreground mb-6">
-                {course.modulesCount} módulos
-              </div>
-              <Button asChild className="w-full mt-auto font-display">
-                <Link href={course.href}>
-                  Acessar Curso
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <Link key={course.id} href={course.href} className="block transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1 rounded-lg">
+            <Card className="flex flex-col overflow-hidden h-full">
+              <CardHeader className="p-0">
+                 <Image 
+                  src={course.imageUrl} 
+                  alt={`Capa do curso ${course.title}`}
+                  width={600}
+                  height={400}
+                  className="object-cover w-full h-48"
+                  data-ai-hint={course.imageHint}
+                  />
+              </CardHeader>
+              <CardContent className="p-6 flex flex-col flex-grow">
+                <CardTitle className="font-headline mb-2">{course.title}</CardTitle>
+                <CardDescription className="font-display mb-4 flex-grow">{course.description}</CardDescription>
+                <div className="flex items-center justify-between mt-auto">
+                    <span className="text-sm text-muted-foreground">
+                        {course.modulesCount} módulos
+                    </span>
+                    <div className="flex items-center text-primary font-display">
+                        Acessar Curso
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
