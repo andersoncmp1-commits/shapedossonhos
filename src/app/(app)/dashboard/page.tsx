@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { doc, getDoc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { ModuleCard } from "@/components/dashboard/ModuleCard";
 import { modules } from "@/lib/modules";
@@ -47,14 +47,16 @@ export default function DashboardPage() {
     if (!user || completedModules.includes(moduleId)) return;
     
     const userDocRef = doc(db, "users", user.uid);
-    const newCompletedModules = [...completedModules, moduleId];
 
     try {
+        // Use arrayUnion to add the new module ID to the array.
+        // This is more efficient and safer than reading and then writing the whole array.
         await updateDoc(userDocRef, {
-            completedModules: newCompletedModules
+            completedModules: arrayUnion(moduleId)
         });
 
-        setCompletedModules(newCompletedModules);
+        // Update the state locally to reflect the change immediately.
+        setCompletedModules(prev => [...prev, moduleId]);
 
         toast({
             title: "Progresso salvo!",
