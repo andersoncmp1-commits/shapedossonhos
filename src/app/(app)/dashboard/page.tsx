@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { doc, getDoc, setDoc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { ModuleCard } from "@/components/dashboard/ModuleCard";
@@ -44,15 +44,17 @@ export default function DashboardPage() {
   }, [user, toast]);
   
   const handleCompleteModule = async (moduleId: string) => {
-    if (!user) return;
+    if (!user || completedModules.includes(moduleId)) return;
     
     const userDocRef = doc(db, "users", user.uid);
-    try {
-        await setDoc(userDocRef, {
-            completedModules: arrayUnion(moduleId)
-        }, { merge: true });
+    const newCompletedModules = [...completedModules, moduleId];
 
-        setCompletedModules(prev => [...prev, moduleId]);
+    try {
+        await updateDoc(userDocRef, {
+            completedModules: newCompletedModules
+        });
+
+        setCompletedModules(newCompletedModules);
 
         toast({
             title: "Progresso salvo!",
