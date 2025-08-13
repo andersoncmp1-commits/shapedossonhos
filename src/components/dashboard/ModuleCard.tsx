@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, Circle, Undo2 } from "lucide-react";
 import type { Module } from "@/lib/modules";
 
 interface ModuleCardProps {
@@ -36,11 +36,10 @@ export function ModuleCard({ module, isCompleted, onComplete }: ModuleCardProps)
         <Button 
           className="w-full font-display" 
           onClick={() => onComplete(module.id)}
-          disabled={isCompleted}
           variant={isCompleted ? 'secondary' : 'default'}
         >
-          {isCompleted ? <CheckCircle2 className="mr-2 h-4 w-4"/> : <Circle className="mr-2 h-4 w-4"/>}
-          {isCompleted ? "Concluído" : "Marcar como Concluído"}
+          {isCompleted ? <Undo2 className="mr-2 h-4 w-4"/> : <CheckCircle2 className="mr-2 h-4 w-4"/>}
+          {isCompleted ? "Desmarcar" : "Marcar como Concluído"}
         </Button>
       </CardFooter>
     </Card>

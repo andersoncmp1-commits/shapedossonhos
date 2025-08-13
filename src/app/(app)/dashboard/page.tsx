@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { doc, getDoc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, arrayUnion, updateDoc, arrayRemove } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { ModuleCard } from "@/components/dashboard/ModuleCard";
@@ -44,24 +44,33 @@ export default function DashboardPage() {
   }, [user, toast]);
   
   const handleCompleteModule = async (moduleId: string) => {
-    if (!user || completedModules.includes(moduleId)) return;
+    if (!user) return;
     
     const userDocRef = doc(db, "users", user.uid);
+    const isCompleted = completedModules.includes(moduleId);
 
     try {
-        // Use arrayUnion to add the new module ID to the array.
-        // This is more efficient and safer than reading and then writing the whole array.
-        await updateDoc(userDocRef, {
-            completedModules: arrayUnion(moduleId)
-        });
-
-        // Update the state locally to reflect the change immediately.
-        setCompletedModules(prev => [...prev, moduleId]);
-
-        toast({
-            title: "Progresso salvo!",
-            description: `Módulo "${modules.find(m => m.id === moduleId)?.title}" marcado como concluído.`,
-        });
+        if (isCompleted) {
+            // Remove the module ID from the array
+            await updateDoc(userDocRef, {
+                completedModules: arrayRemove(moduleId)
+            });
+            setCompletedModules(prev => prev.filter(id => id !== moduleId));
+            toast({
+                title: "Módulo desmarcado",
+                description: `O módulo "${modules.find(m => m.id === moduleId)?.title}" foi marcado como não concluído.`,
+            });
+        } else {
+            // Add the new module ID to the array
+            await updateDoc(userDocRef, {
+                completedModules: arrayUnion(moduleId)
+            });
+            setCompletedModules(prev => [...prev, moduleId]);
+            toast({
+                title: "Progresso salvo!",
+                description: `Módulo "${modules.find(m => m.id === moduleId)?.title}" marcado como concluído.`,
+            });
+        }
 
     } catch (error) {
         console.error("Error updating progress: ", error);
