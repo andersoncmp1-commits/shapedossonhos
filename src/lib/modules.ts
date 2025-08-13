@@ -1,11 +1,13 @@
 import type { LucideIcon } from 'lucide-react';
-import { BookOpen, Target, Construction, FlaskConical, BarChartBig } from 'lucide-react';
+import { Shield, Sword, Heart, Crown, Sun, Anchor, Pray } from 'lucide-react';
 
 export interface Module {
   id: string;
   title: string;
   description: string;
   icon: LucideIcon;
+  imageUrl: string;
+  imageHint: string;
 }
 
 /*
@@ -18,33 +20,59 @@ export interface Module {
 */
 export const modules: Module[] = [
   {
-    id: 'introducao',
-    title: 'Módulo 1: Introdução',
-    description: 'Comece sua jornada e entenda os fundamentos.',
-    icon: BookOpen,
+    id: 'preparacao',
+    title: 'Módulo 1: A Preparação',
+    description: 'Entenda o propósito da Quaresma e prepare seu espírito para a jornada.',
+    icon: Anchor,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'scroll ancient',
   },
   {
-    id: 'estrategias',
-    title: 'Módulo 2: Estratégias',
-    description: 'Aprenda as estratégias centrais para o sucesso.',
-    icon: Target,
+    id: 'o-combate',
+    title: 'Módulo 2: O Combate Espiritual',
+    description: 'Aprenda a reconhecer e a lutar contra as tentações com a ajuda de São Miguel.',
+    icon: Sword,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'knight praying',
   },
   {
-    id: 'implementacao',
-    title: 'Módulo 3: Implementação',
-    description: 'Coloque em prática o que aprendeu.',
-    icon: Construction,
+    id: 'a-protecao',
+    title: 'Módulo 3: A Proteção do Arcanjo',
+    description: 'Medite sobre o poder de São Miguel como nosso guardião e protetor.',
+    icon: Shield,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'angel wings',
   },
   {
-    id: 'testes',
-    title: 'Módulo 4: Testes',
-    description: 'Valide suas implementações e otimize.',
-    icon: FlaskConical,
+    id: 'a-oracao',
+    title: 'Módulo 4: A Força da Oração',
+    description: 'Aprofunde-se nas orações e súplicas a São Miguel Arcanjo.',
+    icon: Pray,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'rosary bible',
   },
   {
-    id: 'escala',
-    title: 'Módulo 5: Escala',
-    description: 'Escale suas soluções e alcance novos patamares.',
-    icon: BarChartBig,
+    id: 'a-conversao',
+    title: 'Módulo 5: A Conversão do Coração',
+    description: 'Busque a transformação interior e a conversão sincera do coração.',
+    icon: Heart,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'light heart',
+  },
+  {
+    id: 'a-vitoria',
+    title: 'Módulo 6: A Vitória sobre o Mal',
+    description: 'Celebre a vitória de Cristo e a intercessão de São Miguel na nossa vida.',
+    icon: Crown,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'crown light',
+  },
+  {
+    id: 'a-perseveranca',
+    title: 'Módulo 7: A Perseverança na Fé',
+    description: 'Leve os frutos desta Quaresma para a sua vida e persevere no caminho da fé.',
+    icon: Sun,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'sunshine forest',
   },
 ];
