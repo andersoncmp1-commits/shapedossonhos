@@ -66,4 +66,12 @@ export const modules: Module[] = [
     imageHint: 'crown light',
     pdfUrl: 'https://drive.google.com/file/d/1ASvyq8P4xIKbwti2U_EwXYn71iyzsBzy/preview',
   },
+  {
+    id: 'caminho-caridade',
+    title: 'Caminho de 40 dias de Caridade',
+    icon: Heart,
+    imageUrl: 'https://i.imgur.com/aNh6b5B.png',
+    imageHint: 'helping hands',
+    pdfUrl: 'https://drive.google.com/file/d/121Nn27Q0pRwfoMnuaU8LfQ0Wg3OGU67Q/preview',
+  },
 ];
