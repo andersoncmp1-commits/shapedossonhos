@@ -6,17 +6,19 @@ import { doc, getDoc, setDoc, arrayUnion, updateDoc, arrayRemove } from "firebas
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { ModuleCard } from "@/components/dashboard/ModuleCard";
-import { modules } from "@/lib/modules";
+import { modules, type Module } from "@/lib/modules";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 
 export default function CourseDetailPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [completedModules, setCompletedModules] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -45,7 +47,7 @@ export default function CourseDetailPage() {
     fetchProgress();
   }, [user, toast]);
   
-  const handleCompleteModule = async (moduleId: string) => {
+  const handleToggleComplete = async (moduleId: string) => {
     if (!user) return;
     
     const userDocRef = doc(db, "users", user.uid);
@@ -53,23 +55,13 @@ export default function CourseDetailPage() {
 
     try {
         if (isCompleted) {
-            await updateDoc(userDocRef, {
-                completedModules: arrayRemove(moduleId)
-            });
+            await updateDoc(userDocRef, { completedModules: arrayRemove(moduleId) });
             setCompletedModules(prev => prev.filter(id => id !== moduleId));
-            toast({
-                title: "Módulo desmarcado",
-                description: `O módulo foi marcado como não concluído.`,
-            });
+            toast({ title: "Módulo desmarcado" });
         } else {
-            await updateDoc(userDocRef, {
-                completedModules: arrayUnion(moduleId)
-            });
+            await updateDoc(userDocRef, { completedModules: arrayUnion(moduleId) });
             setCompletedModules(prev => [...prev, moduleId]);
-            toast({
-                title: "Progresso salvo!",
-                description: `Módulo marcado como concluído.`,
-            });
+            toast({ title: "Módulo concluído!", description: "Ótimo trabalho!" });
         }
 
     } catch (error) {
@@ -80,6 +72,14 @@ export default function CourseDetailPage() {
             description: "Não foi possível salvar seu progresso.",
         });
     }
+  };
+
+  const handleOpenModule = (module: Module) => {
+    setSelectedModule(module);
+  };
+  
+  const handleCloseDialog = () => {
+    setSelectedModule(null);
   };
 
   const courseTitle = "Guia para Quaresma de São Miguel Arcanjo";
@@ -120,7 +120,7 @@ export default function CourseDetailPage() {
             </Button>
         </div>
         <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
-        <p className="text-muted-foreground font-display mb-8">Clique em uma imagem para marcar o módulo como concluído.</p>
+        <p className="text-muted-foreground font-display mb-8">Clique em um módulo para abrir o material de estudo.</p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {modules.map(module => (
@@ -128,10 +128,41 @@ export default function CourseDetailPage() {
                     key={module.id} 
                     module={module}
                     isCompleted={completedModules.includes(module.id)}
-                    onComplete={handleCompleteModule}
+                    onOpen={handleOpenModule}
                 />
             ))}
         </div>
+
+        {selectedModule && (
+          <Dialog open={!!selectedModule} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+            <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col p-0">
+                <DialogHeader className="p-6 pb-0">
+                    <DialogTitle>{selectedModule.title}</DialogTitle>
+                </DialogHeader>
+                <div className="flex-grow overflow-hidden px-6">
+                    <iframe 
+                        src={selectedModule.pdfUrl} 
+                        width="100%" 
+                        height="100%" 
+                        allow="autoplay"
+                        className="border-0"
+                    ></iframe>
+                </div>
+                <DialogFooter className="p-6 pt-4 border-t bg-background/80">
+                  <Button 
+                    variant={completedModules.includes(selectedModule.id) ? "secondary" : "default"}
+                    onClick={() => handleToggleComplete(selectedModule.id)}
+                  >
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    {completedModules.includes(selectedModule.id) ? "Desmarcar como concluído" : "Marcar como concluído"}
+                  </Button>
+                  <DialogClose asChild>
+                    <Button variant="outline">Fechar</Button>
+                  </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
     </div>
   );
 }
