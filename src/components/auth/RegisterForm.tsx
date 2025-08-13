@@ -53,9 +53,9 @@ export function RegisterForm() {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       toast({
         title: "Conta criada com sucesso!",
-        description: "Você será redirecionado para o painel.",
+        description: "Você será redirecionado para a página de cursos.",
       });
-      router.push("/dashboard");
+      router.push("/courses");
     } catch (error: any) {
       console.error("Erro no registro:", error);
       let description = "Ocorreu um erro ao criar sua conta. Tente novamente.";

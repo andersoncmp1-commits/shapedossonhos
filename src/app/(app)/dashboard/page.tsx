@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from 'next/link';
 import { doc, getDoc, setDoc, arrayUnion, updateDoc, arrayRemove } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,8 +9,10 @@ import { ModuleCard } from "@/components/dashboard/ModuleCard";
 import { modules } from "@/lib/modules";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
-export default function DashboardPage() {
+export default function CourseDetailPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [completedModules, setCompletedModules] = useState<string[]>([]);
@@ -24,7 +27,6 @@ export default function DashboardPage() {
           if (userDoc.exists()) {
             setCompletedModules(userDoc.data().completedModules || []);
           } else {
-            // Create user document if it doesn't exist
             await setDoc(userDocRef, { email: user.email, completedModules: [] });
           }
         } catch (error) {
@@ -51,7 +53,6 @@ export default function DashboardPage() {
 
     try {
         if (isCompleted) {
-            // Remove the module ID from the array
             await updateDoc(userDocRef, {
                 completedModules: arrayRemove(moduleId)
             });
@@ -61,7 +62,6 @@ export default function DashboardPage() {
                 description: `O módulo "${modules.find(m => m.id === moduleId)?.title}" foi marcado como não concluído.`,
             });
         } else {
-            // Add the new module ID to the array
             await updateDoc(userDocRef, {
                 completedModules: arrayUnion(moduleId)
             });
@@ -82,10 +82,22 @@ export default function DashboardPage() {
     }
   };
 
+  const courseTitle = "Guia para Quaresma de São Miguel Arcanjo";
+
   if (loading) {
     return (
         <div>
-            <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Seu Painel</h1>
+            <div className="mb-8">
+              <Button asChild variant="ghost">
+                <Link href="/courses">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Voltar para Cursos
+                </Link>
+              </Button>
+            </div>
+            <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
+            <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.from({ length: 5 }).map((_, i) => (
                     <div key={i} className="p-6 rounded-lg bg-card">
@@ -102,8 +114,16 @@ export default function DashboardPage() {
 
   return (
     <div>
-        <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">Seu Painel</h1>
-        <p className="text-muted-foreground font-display mb-8">Continue de onde parou e avance em sua jornada.</p>
+        <div className="mb-8">
+            <Button asChild variant="ghost">
+                <Link href="/courses">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar para Cursos
+                </Link>
+            </Button>
+        </div>
+        <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
+        <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {modules.map(module => (

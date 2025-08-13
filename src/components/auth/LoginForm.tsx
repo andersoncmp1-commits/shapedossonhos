@@ -46,9 +46,9 @@ export function LoginForm() {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       toast({
         title: "Login bem-sucedido!",
-        description: "Redirecionando para o painel.",
+        description: "Redirecionando para seus cursos.",
       });
-      router.push("/dashboard");
+      router.push("/courses");
     } catch (error: any) {
       console.error("Erro no login:", error);
       toast({
