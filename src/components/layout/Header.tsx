@@ -31,7 +31,7 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center space-x-4 px-4 sm:justify-between sm:space-x-0">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <h1 className="font-headline text-2xl font-bold text-primary">Aura Interna</h1>
+          <h1 className="font-headline text-2xl font-bold text-primary">Católicos de Verdade</h1>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">

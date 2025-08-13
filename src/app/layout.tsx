@@ -4,7 +4,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Aura Interna',
+  title: 'Católicos de Verdade',
   description: 'Sua área de membros exclusiva.',
 };
 
