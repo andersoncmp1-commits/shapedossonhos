@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Shield, Sword, Heart, Crown, Sun, Anchor, Pray } from 'lucide-react';
+import { Shield, Sword, Heart, Crown, Sun, Anchor, BookOpenCheck } from 'lucide-react';
 
 export interface Module {
   id: string;
@@ -47,7 +47,7 @@ export const modules: Module[] = [
     id: 'a-oracao',
     title: 'Módulo 4: A Força da Oração',
     description: 'Aprofunde-se nas orações e súplicas a São Miguel Arcanjo.',
-    icon: Pray,
+    icon: BookOpenCheck,
     imageUrl: 'https://placehold.co/600x400.png',
     imageHint: 'rosary bible',
   },
