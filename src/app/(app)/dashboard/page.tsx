@@ -59,7 +59,7 @@ export default function CourseDetailPage() {
             setCompletedModules(prev => prev.filter(id => id !== moduleId));
             toast({
                 title: "Módulo desmarcado",
-                description: `O módulo "${modules.find(m => m.id === moduleId)?.title}" foi marcado como não concluído.`,
+                description: `O módulo foi marcado como não concluído.`,
             });
         } else {
             await updateDoc(userDocRef, {
@@ -68,7 +68,7 @@ export default function CourseDetailPage() {
             setCompletedModules(prev => [...prev, moduleId]);
             toast({
                 title: "Progresso salvo!",
-                description: `Módulo "${modules.find(m => m.id === moduleId)?.title}" marcado como concluído.`,
+                description: `Módulo marcado como concluído.`,
             });
         }
 
@@ -98,13 +98,10 @@ export default function CourseDetailPage() {
             <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
             <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="p-6 rounded-lg bg-card">
-                        <Skeleton className="h-8 w-8 mb-4 rounded-full" />
-                        <Skeleton className="h-6 w-3/4 mb-2" />
-                        <Skeleton className="h-4 w-full" />
-                        <Skeleton className="h-10 w-full mt-6" />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="rounded-lg bg-card">
+                        <Skeleton className="w-full aspect-[9/16] rounded-lg" />
                     </div>
                 ))}
             </div>
@@ -123,9 +120,9 @@ export default function CourseDetailPage() {
             </Button>
         </div>
         <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
-        <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
+        <p className="text-muted-foreground font-display mb-8">Clique em uma imagem para marcar o módulo como concluído.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {modules.map(module => (
                 <ModuleCard 
                     key={module.id} 
