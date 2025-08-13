@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
@@ -27,13 +26,13 @@ export default function CoursesPage() {
         {courses.map((course) => (
           <Link key={course.id} href={course.href} className="block transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1 rounded-lg">
             <Card className="flex flex-col overflow-hidden h-full">
-              <CardHeader className="p-0">
+              <CardHeader className="p-0 relative">
                  <Image 
                   src={course.imageUrl} 
                   alt={`Capa do curso ${course.title}`}
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-48"
+                  width={1024}
+                  height={1024}
+                  className="object-cover w-full h-auto aspect-square"
                   data-ai-hint={course.imageHint}
                   />
               </CardHeader>
