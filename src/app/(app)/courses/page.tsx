@@ -9,9 +9,9 @@ export default function CoursesPage() {
       id: 'quaresma-sao-miguel',
       title: 'Guia para Quaresma de São Miguel Arcanjo',
       description: 'Um guia completo para você viver intensamente a Quaresma de São Miguel Arcanjo.',
-      imageUrl: 'https://quaresmasaomiguel.primefocus.com.br/wp-content/uploads/2025/08/ChatGPT-Image-Aug-12-2025-11_21_25-PM.png',
+      imageUrl: 'https://i.imgur.com/TQU2k2z.png',
       imageHint: 'archangel michael',
-      modulesCount: 7,
+      modulesCount: 8,
       href: '/dashboard', 
     },
     // Adicione mais cursos aqui no futuro
