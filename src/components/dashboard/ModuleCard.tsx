@@ -26,13 +26,17 @@ export function ModuleCard({ module, isCompleted, onOpen }: ModuleCardProps) {
         className="object-cover w-full h-full aspect-[9/16]"
         data-ai-hint={module.imageHint}
       />
-      <div className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${isCompleted ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+      <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 group-hover:bg-black/60`} />
       
       {isCompleted && (
-        <div className="absolute top-4 right-4">
-          <CheckCircle2 className="w-8 h-8 text-white/90 drop-shadow-lg" />
+        <div className="absolute top-4 right-4 text-white/90 drop-shadow-lg">
+          <CheckCircle2 className="w-8 h-8" />
         </div>
       )}
+
+      <div className="absolute bottom-0 left-0 p-4">
+        <h3 className="font-headline text-lg font-bold text-white drop-shadow-md">{module.title}</h3>
+      </div>
     </Card>
   );
 }
