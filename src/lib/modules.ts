@@ -75,12 +75,4 @@ export const modules: Module[] = [
     imageHint: 'helping hands',
     pdfUrl: 'https://drive.google.com/file/d/121Nn27Q0pRwfoMnuaU8LfQ0Wg3OGU67Q/preview',
   },
-  {
-    id: 'visita-santissimo',
-    title: 'Visita ao Santíssimo',
-    icon: BookOpenCheck,
-    imageUrl: 'https://i.imgur.com/vP8k4O8.png',
-    imageHint: 'monstrance church',
-    pdfUrl: 'https://drive.google.com/file/d/13MOCfN4jK4yeRZSJk8bkQcrcEmxQpf03/preview',
-  },
 ];
