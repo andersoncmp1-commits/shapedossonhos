@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Shield, Sword, Heart, Crown, BookOpenCheck, Anchor } from 'lucide-react';
+import { Shield, Sword, Heart, Crown, BookOpenCheck, Anchor, Cross } from 'lucide-react';
 
 export interface Module {
   id: string;
@@ -73,5 +73,13 @@ export const modules: Module[] = [
     imageUrl: 'https://i.imgur.com/aNh6b5B.png',
     imageHint: 'helping hands',
     pdfUrl: 'https://drive.google.com/file/d/121Nn27Q0pRwfoMnuaU8LfQ0Wg3OGU67Q/preview',
+  },
+  {
+    id: 'via-sacra-meditada',
+    title: 'Via Sacra Meditada',
+    icon: Cross,
+    imageUrl: 'https://i.imgur.com/9vO2j8W.png',
+    imageHint: 'cross hill',
+    pdfUrl: 'https://drive.google.com/file/d/13MOCfN4jK4yeRZSJk8bkQcrcEmxQpf03/preview',
   },
 ];
