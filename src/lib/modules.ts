@@ -81,6 +81,6 @@ export const modules: Module[] = [
     icon: Church,
     imageUrl: 'https://i.imgur.com/YloVfuW.png',
     imageHint: 'monstrance eucharist',
-    pdfUrl: 'https://drive.google.com/file/d/121Nn27Q0pRwfoMnuaU8LfQ0Wg3OGU67Q/preview',
+    pdfUrl: 'https://drive.google.com/file/d/13MOCfN4jK4yeRZSJk8bkQcrcEmxQpf03/preview',
   },
 ];
