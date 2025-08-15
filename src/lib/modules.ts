@@ -78,7 +78,7 @@ export const modules: Module[] = [
     id: 'visita-santissimo',
     title: 'Visita ao Santíssimo',
     icon: BookOpenCheck, // Ícone válido como fallback
-    imageUrl: 'https://i.imgur.com/9vO2j8W.png',
+    imageUrl: 'https://placehold.co/1080x1920.png',
     imageHint: 'monstrance church',
     pdfUrl: 'https://drive.google.com/file/d/13MOCfN4jK4yeRZSJk8bkQcrcEmxQpf03/preview',
   },
