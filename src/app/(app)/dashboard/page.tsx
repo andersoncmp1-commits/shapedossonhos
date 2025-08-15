@@ -99,7 +99,7 @@ export default function CourseDetailPage() {
             <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {Array.from({ length: 6 }).map((_, i) => (
+                {Array.from({ length: 8 }).map((_, i) => (
                     <div key={i} className="rounded-lg bg-card">
                         <Skeleton className="w-full aspect-[9/16] rounded-lg" />
                     </div>
@@ -122,7 +122,7 @@ export default function CourseDetailPage() {
         <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
         <p className="text-muted-foreground font-display mb-8">Clique em um módulo para abrir o material de estudo.</p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {modules.map(module => (
                 <ModuleCard 
                     key={module.id} 

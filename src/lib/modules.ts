@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Shield, Sword, Heart, Crown, BookOpenCheck, Anchor, Cross } from 'lucide-react';
+import { Shield, Sword, Heart, Crown, BookOpenCheck, Anchor } from 'lucide-react';
 
 export interface Module {
   id: string;
@@ -77,7 +77,7 @@ export const modules: Module[] = [
   {
     id: 'visita-santissimo',
     title: 'Visita ao Santíssimo',
-    icon: Cross,
+    icon: BookOpenCheck, // Ícone válido como fallback
     imageUrl: 'https://i.imgur.com/9vO2j8W.png',
     imageHint: 'monstrance church',
     pdfUrl: 'https://drive.google.com/file/d/13MOCfN4jK4yeRZSJk8bkQcrcEmxQpf03/preview',
