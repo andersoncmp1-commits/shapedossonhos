@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { Shield, Sword, Heart, Crown, BookOpenCheck, Anchor } from 'lucide-react';
+import { Shield, Sword, Heart, Crown, BookOpenCheck, Anchor, Church } from 'lucide-react';
 
 export interface Module {
   id: string;
@@ -73,6 +73,14 @@ export const modules: Module[] = [
     icon: Heart,
     imageUrl: 'https://i.imgur.com/aNh6b5B.png',
     imageHint: 'helping hands',
+    pdfUrl: 'https://drive.google.com/file/d/121Nn27Q0pRwfoMnuaU8LfQ0Wg3OGU67Q/preview',
+  },
+  {
+    id: 'visita-santissimo',
+    title: 'Visita ao Santíssimo',
+    icon: Church,
+    imageUrl: 'https://i.imgur.com/YloVfuW.png',
+    imageHint: 'monstrance eucharist',
     pdfUrl: 'https://drive.google.com/file/d/121Nn27Q0pRwfoMnuaU8LfQ0Wg3OGU67Q/preview',
   },
 ];
