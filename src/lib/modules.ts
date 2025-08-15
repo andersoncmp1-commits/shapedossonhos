@@ -79,7 +79,7 @@ export const modules: Module[] = [
     id: 'visita-santissimo',
     title: 'Visita ao Santíssimo',
     icon: BookOpenCheck,
-    imageUrl: 'https://i.imgur.com/vP8k4O8.jpeg',
+    imageUrl: 'https://i.imgur.com/vP8k4O8.png',
     imageHint: 'monstrance church',
     pdfUrl: 'https://drive.google.com/file/d/13MOCfN4jK4yeRZSJk8bkQcrcEmxQpf03/preview',
   },
