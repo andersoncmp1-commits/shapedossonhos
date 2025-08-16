@@ -57,7 +57,7 @@ export const modules: Module[] = [
     icon: Heart,
     imageUrl: 'https://i.imgur.com/8yuVnea.png',
     imageHint: 'light heart',
-    pdfUrl: 'https://drive.google.com/file/d/1C06lKbocBJRtaE2ctrJNMZ0lwCrAS0Kw/preview',
+    pdfUrl: 'https://drive.google.com/file/d/1LQOC1JZLrYP2iNkwCON7qSnPJQ4R1Zew/preview',
   },
   {
     id: 'terco-sao-miguel',
