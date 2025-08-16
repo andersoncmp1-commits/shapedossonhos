@@ -57,7 +57,7 @@ export const modules: Module[] = [
     icon: Heart,
     imageUrl: 'https://i.imgur.com/8yuVnea.png',
     imageHint: 'light heart',
-    pdfUrl: 'https://quaresmasaomiguel.primefocus.com.br/wp-content/uploads/2025/08/Oracoes-para-cada-dia-da-quaresma.pdf',
+    pdfUrl: 'https://drive.google.com/file/d/1HEIzto8FU05gSE3l3VHFn26CMdfkqVpj/preview',
   },
   {
     id: 'terco-sao-miguel',
