@@ -16,7 +16,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const auth = getAuth(app);
 
-// Initialize Firestore with offline persistence
+// Initialize Firestore with memory cache for more reliable data fetching on production
 const db = initializeFirestore(app, {
   localCache: memoryLocalCache({
     cacheSizeBytes: CACHE_SIZE_UNLIMITED
