@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { initializeFirestore, memoryLocalCache, persistentLocalCache, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
+import { initializeFirestore, memoryLocalCache, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -18,7 +18,7 @@ export const auth = getAuth(app);
 
 // Initialize Firestore with offline persistence
 const db = initializeFirestore(app, {
-  localCache: persistentLocalCache({
+  localCache: memoryLocalCache({
     cacheSizeBytes: CACHE_SIZE_UNLIMITED
   })
 });
