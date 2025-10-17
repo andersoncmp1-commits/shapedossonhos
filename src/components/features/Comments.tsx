@@ -103,21 +103,19 @@ export function Comments({ topicType, topicId }: CommentsProps) {
 
     const commentsCollectionRef = collection(db, commentsCollectionName);
 
-    addDoc(commentsCollectionRef, commentData)
-      .then(() => {
+    try {
+        await addDoc(commentsCollectionRef, commentData);
         setNewComment("");
-      })
-      .catch((serverError) => {
+    } catch (serverError) {
         const permissionError = new FirestorePermissionError({
             path: commentsCollectionRef.path,
             operation: 'create',
             requestResourceData: commentData,
         });
         errorEmitter.emit('permission-error', permissionError);
-      })
-      .finally(() => {
+    } finally {
         setIsLoading(false);
-      });
+    }
   };
   
   return (
