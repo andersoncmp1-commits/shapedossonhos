@@ -18,9 +18,8 @@ const auth: Auth = getAuth(app);
 const db: Firestore = getFirestore(app);
 
 // Conectar aos emuladores apenas em ambiente de desenvolvimento
+// O SDK do Firebase gerencia a reconexão para nós.
 if (process.env.NODE_ENV === 'development') {
-    // Usar 'localhost' é mais robusto para ambientes com port forwarding.
-    // O SDK do Firebase gerencia a reconexão para nós, então não precisamos de try/catch.
     connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
     connectFirestoreEmulator(db, 'localhost', 8080);
 }
