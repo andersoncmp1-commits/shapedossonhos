@@ -59,4 +59,3 @@ export function getFirebase() {
   }
   return { app, auth, db };
 }
-
