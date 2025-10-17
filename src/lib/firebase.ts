@@ -1,7 +1,7 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, connectAuthEmulator, type Auth } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, initializeFirestore, memoryLocalCache, CACHE_SIZE_UNLIMITED, type Firestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -21,9 +21,7 @@ function initializeFirebase() {
     if (getApps().length === 0) {
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
-        db = initializeFirestore(app, {
-            localCache: memoryLocalCache({ cacheSizeBytes: CACHE_SIZE_UNLIMITED })
-        });
+        db = getFirestore(app);
 
         if (!emulatorsConnected) {
             connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
@@ -40,6 +38,5 @@ function initializeFirebase() {
 initializeFirebase();
 
 export function getFirebase() {
-  // A inicialização já aconteceu, então apenas retornamos as instâncias.
   return { app, auth, db };
 }
