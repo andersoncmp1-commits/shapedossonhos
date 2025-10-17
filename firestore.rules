@@ -1,16 +1,24 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
 
+    // Regra geral para a coleção de usuários
+    match /users/{userId} {
+      allow read, update, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Regra específica para a coleção de comentários de lições da confissão
     match /confession_lesson_comments/{commentId} {
-      // Permite que qualquer usuário autenticado leia e liste comentários.
-      allow list, read: if request.auth != null;
+      // Qualquer usuário autenticado pode listar (ler a coleção) os comentários, 
+      // pois a consulta no app sempre filtra por um 'topicId' específico.
+      allow list: if request.auth != null;
       
-      // Permite que um usuário autenticado crie um comentário se o 'userId' no novo documento
-      // corresponder ao UID do usuário que está fazendo a solicitação.
+      // Qualquer usuário autenticado pode ler um comentário individual.
+      allow get: if request.auth != null;
+
+      // Permite que um usuário autenticado crie um comentário se o ID do usuário no 
+      // documento for o mesmo do usuário que faz a requisição.
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
   }
