@@ -12,33 +12,26 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Variáveis para armazenar as instâncias do Firebase
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 let emulatorsConnected = false;
 
-// Função para inicializar o Firebase (se ainda não foi inicializado)
 function initializeFirebase() {
     if (!getApps().length) {
-        // Inicializa o Firebase App
         app = initializeApp(firebaseConfig);
-        
-        // Inicializa Auth e Firestore
         auth = getAuth(app);
         db = initializeFirestore(app, {
             localCache: memoryLocalCache({ cacheSizeBytes: CACHE_SIZE_UNLIMITED })
         });
 
-        // Conecta aos emuladores incondicionalmente no ambiente de desenvolvimento.
-        // A verificação de hostname foi removida pois o ambiente não é 'localhost'.
-        // Esta verificação garante que a conexão só ocorra uma vez.
         if (!emulatorsConnected) {
             console.log('Connecting to Firebase emulators...');
-            connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-            connectFirestoreEmulator(db, '127.0.0.1', 8080);
+            // Use o nome do serviço 'auth' e 'firestore' como host, que são os nomes dos serviços na rede interna do ambiente de desenvolvimento.
+            connectAuthEmulator(auth, 'http://auth:9099', { disableWarnings: true });
+            connectFirestoreEmulator(db, 'firestore', 8080);
             emulatorsConnected = true;
-            console.log('Connected to Firebase emulators.');
+            console.log('Successfully connected to Firebase emulators.');
         }
     } else {
         app = getApp();
@@ -47,13 +40,9 @@ function initializeFirebase() {
     }
 }
 
-// Chame a função de inicialização uma vez para configurar tudo.
 initializeFirebase();
 
-// Função que os componentes usarão para obter as instâncias já configuradas
 export function getFirebase() {
-  // Garante a inicialização antes de retornar as instâncias
-  // Isso é um fallback, mas a chamada acima deve resolver.
   if (!app) {
     initializeFirebase();
   }
