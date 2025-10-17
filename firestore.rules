@@ -1,24 +1,9 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Permite que usuários autenticados leiam e escrevam em seus próprios documentos
-    match /users/{userId} {
-      allow read, update: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null;
-    }
-
-    // Regras para os comentários das aulas de confissão
     match /confession_lesson_comments/{commentId} {
-      // Permite que qualquer usuário autenticado leia (get) um comentário individual
-      allow get: if request.auth != null;
-      
-      // Permite que qualquer usuário autenticado liste (list) todos os comentários
-      allow list: if request.auth != null;
-
-      // Permite que um usuário autenticado crie um comentário
-      allow create: if request.auth != null;
+      allow read, list: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
   }
 }
