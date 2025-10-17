@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,6 +13,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { errorEmitter } from "@/lib/error-emitter";
+import { FirestorePermissionError } from "@/lib/errors";
 
 export default function CourseDetailPage() {
   const { user } = useAuth();
@@ -29,7 +32,15 @@ export default function CourseDetailPage() {
           if (userDoc.exists()) {
             setCompletedModules(userDoc.data().completedModules || []);
           } else {
-            await setDoc(userDocRef, { email: user.email, completedModules: [] });
+            await setDoc(userDocRef, { email: user.email, completedModules: [] })
+             .catch(serverError => {
+                  const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'create',
+                    requestResourceData: { email: user.email, completedModules: [] },
+                  });
+                  errorEmitter.emit('permission-error', permissionError);
+              });
           }
         } catch (error) {
           console.error("Error fetching user progress: ", error);
@@ -52,26 +63,27 @@ export default function CourseDetailPage() {
     
     const userDocRef = doc(db, "users", user.uid);
     const isCompleted = completedModules.includes(moduleId);
+    
+    const updateData = { completedModules: isCompleted ? arrayRemove(moduleId) : arrayUnion(moduleId) };
 
-    try {
-        if (isCompleted) {
-            await updateDoc(userDocRef, { completedModules: arrayRemove(moduleId) });
-            setCompletedModules(prev => prev.filter(id => id !== moduleId));
-            toast({ title: "Módulo desmarcado" });
-        } else {
-            await updateDoc(userDocRef, { completedModules: arrayUnion(moduleId) });
-            setCompletedModules(prev => [...prev, moduleId]);
-            toast({ title: "Módulo concluído!", description: "Ótimo trabalho!" });
-        }
-
-    } catch (error) {
-        console.error("Error updating progress: ", error);
-        toast({
-            variant: "destructive",
-            title: "Erro",
-            description: "Não foi possível salvar seu progresso.",
+    updateDoc(userDocRef, updateData)
+        .then(() => {
+            if (isCompleted) {
+                setCompletedModules(prev => prev.filter(id => id !== moduleId));
+                toast({ title: "Módulo desmarcado" });
+            } else {
+                setCompletedModules(prev => [...prev, moduleId]);
+                toast({ title: "Módulo concluído!", description: "Ótimo trabalho!" });
+            }
+        })
+        .catch(serverError => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'update',
+              requestResourceData: updateData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
         });
-    }
   };
 
   const handleOpenModule = (module: Module) => {

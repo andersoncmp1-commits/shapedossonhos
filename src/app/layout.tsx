@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
   title: 'Católicos de Verdade',
@@ -24,6 +25,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
           <Toaster />
+          <FirebaseErrorListener />
         </AuthProvider>
       </body>
     </html>

@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase";
-import { collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp, Timestamp } from "firebase/firestore";
+import { collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp, Timestamp, CollectionReference } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +13,8 @@ import { User } from "lucide-react";
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Skeleton } from "../ui/skeleton";
+import { errorEmitter } from "@/lib/error-emitter";
+import { FirestorePermissionError } from "@/lib/errors";
 
 interface Comment {
   id: string;
@@ -41,8 +44,9 @@ export function Comments({ topicType, topicId }: CommentsProps) {
     if (!topicId) return;
 
     setIsFetching(true);
+    const commentsCollectionRef = collection(db, commentsCollectionName) as CollectionReference<Omit<Comment, 'id'>>;
     const q = query(
-      collection(db, commentsCollectionName),
+      commentsCollectionRef,
       where("topicId", "==", topicId),
       orderBy("createdAt", "desc")
     );
@@ -54,12 +58,12 @@ export function Comments({ topicType, topicId }: CommentsProps) {
       });
       setComments(commentsData);
       setIsFetching(false);
-    }, (error) => {
-        toast({
-            variant: "destructive",
-            title: "Erro ao carregar comentários",
-            description: "Não foi possível buscar os comentários. Tente novamente mais tarde."
+    }, (serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: commentsCollectionRef.path,
+          operation: 'list',
         });
+        errorEmitter.emit('permission-error', permissionError);
         setIsFetching(false);
     });
 
@@ -86,25 +90,33 @@ export function Comments({ topicType, topicId }: CommentsProps) {
     }
 
     setIsLoading(true);
-    try {
-      await addDoc(collection(db, commentsCollectionName), {
+    
+    const commentData = {
         topicId: topicId,
         userId: user.uid,
         userName: user.displayName || user.email || "Anônimo",
         userPhotoURL: user.photoURL,
         text: newComment.trim(),
         createdAt: serverTimestamp(),
+      };
+
+    const commentsCollectionRef = collection(db, commentsCollectionName);
+
+    addDoc(commentsCollectionRef, commentData)
+      .then(() => {
+        setNewComment("");
+      })
+      .catch((serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: commentsCollectionRef.path,
+            operation: 'create',
+            requestResourceData: commentData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-      setNewComment("");
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao comentar",
-        description: "Não foi possível adicionar seu comentário. Tente novamente.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
   };
   
   return (

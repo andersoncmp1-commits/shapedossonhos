@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -13,6 +14,8 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Comments } from "@/components/features/Comments";
+import { errorEmitter } from "@/lib/error-emitter";
+import { FirestorePermissionError } from "@/lib/errors";
 
 export default function ConfessionCoursePage() {
   const { user } = useAuth();
@@ -32,7 +35,15 @@ export default function ConfessionCoursePage() {
             const data = userDoc.data();
             setCompletedLessons(data.completedConfessionLessons || []);
           } else {
-            await setDoc(userDocRef, { email: user.email, completedConfessionLessons: [] }, { merge: true });
+            await setDoc(userDocRef, { email: user.email, completedConfessionLessons: [] }, { merge: true })
+              .catch(serverError => {
+                  const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'create',
+                    requestResourceData: { email: user.email, completedConfessionLessons: [] },
+                  });
+                  errorEmitter.emit('permission-error', permissionError);
+              });
           }
         } catch (error) {
           console.error("Error fetching user progress: ", error);
@@ -66,24 +77,26 @@ export default function ConfessionCoursePage() {
     const userDocRef = doc(db, "users", user.uid);
     const isCompleted = completedLessons.includes(selectedLesson.id);
 
-    try {
-        if (isCompleted) {
-            await updateDoc(userDocRef, { completedConfessionLessons: arrayRemove(selectedLesson.id) });
-            setCompletedLessons(prev => prev.filter(id => id !== selectedLesson.id));
-            toast({ title: "Aula desmarcada." });
-        } else {
-            await updateDoc(userDocRef, { completedConfessionLessons: arrayUnion(selectedLesson.id) });
-            setCompletedLessons(prev => [...prev, selectedLesson.id]);
-            toast({ title: "Aula concluída!", description: "Continue assim!" });
-        }
-    } catch (error) {
-        console.error("Error updating progress: ", error);
-        toast({
-            variant: "destructive",
-            title: "Erro",
-            description: "Não foi possível salvar seu progresso.",
+    const updateData = { completedConfessionLessons: isCompleted ? arrayRemove(selectedLesson.id) : arrayUnion(selectedLesson.id) };
+
+    updateDoc(userDocRef, updateData)
+        .then(() => {
+            if (isCompleted) {
+                setCompletedLessons(prev => prev.filter(id => id !== selectedLesson.id));
+                toast({ title: "Aula desmarcada." });
+            } else {
+                setCompletedLessons(prev => [...prev, selectedLesson.id]);
+                toast({ title: "Aula concluída!", description: "Continue assim!" });
+            }
+        })
+        .catch(serverError => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'update',
+              requestResourceData: updateData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
         });
-    }
   };
 
   const courseTitle = "Curso: Como se Confessar melhor";
