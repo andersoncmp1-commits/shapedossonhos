@@ -18,11 +18,11 @@ const auth: Auth = getAuth(app);
 const db: Firestore = getFirestore(app);
 
 // Conectar aos emuladores apenas em ambiente de desenvolvimento
-// O SDK do Firebase gerencia a reconexão para nós.
 if (process.env.NODE_ENV === 'development') {
+    // O SDK do Firebase gerencia a reconexão para nós.
     try {
-        connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-        connectFirestoreEmulator(db, '127.0.0.1', 8080);
+        connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+        connectFirestoreEmulator(db, 'localhost', 8080);
     } catch (error) {
         // Isso pode acontecer se o Fast Refresh tentar reconectar.
         // O SDK já está conectado, então podemos ignorar o erro.
