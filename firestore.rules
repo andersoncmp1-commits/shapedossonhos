@@ -1,30 +1,21 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Regras para coleções de comentários (ex: confession_lesson_comments)
+    // Regras para a coleção de comentários
     match /confession_lesson_comments/{commentId} {
-      // Permite a leitura de um comentário individual por qualquer usuário autenticado.
-      allow get: if request.auth != null;
+      // Permite leitura (get) e listagem (list) para qualquer usuário autenticado.
+      allow read: if request.auth != null;
 
-      // Não são necessárias regras de listagem aqui, pois elas são tratadas no match da coleção.
-    }
-
-    match /confession_lesson_comments {
-        // Permite a listagem de comentários APENAS se a consulta filtrar por 'topicId'.
-        // Isso é crucial para alinhar com a query do app e resolver o erro de permissão.
-        allow list: if request.auth != null && 'topicId' in request.query.get('where', {});
-
-        // Permite a criação de um novo comentário se o usuário estiver autenticado
-        // e for o autor do comentário.
-        allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      // Permite a criação de um novo comentário se o usuário estiver autenticado e o 'userId' no novo documento for o mesmo que o do autor da requisição.
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
 
     // Regras para a coleção de usuários
     match /users/{userId} {
-      // Permite que um usuário leia, atualize ou delete apenas seu próprio documento.
-      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-      // Permite a criação de um novo documento de usuário.
+      // Permite que um usuário leia e atualize seu próprio documento.
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      
+      // Permite a criação de um documento de usuário.
       allow create: if request.auth != null;
     }
   }
