@@ -33,9 +33,10 @@ function initializeFirebase() {
   }
 }
 
+// Chame a inicialização imediatamente no escopo do módulo.
+initializeFirebase();
+
 export function getFirebase() {
-  if (!app) {
-    initializeFirebase();
-  }
+  // A inicialização já aconteceu, apenas retorne as instâncias.
   return { app, auth, db };
 }
