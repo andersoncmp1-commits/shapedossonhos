@@ -12,35 +12,25 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-let app: FirebaseApp;
-let auth: Auth;
-let db: Firestore;
-let emulatorsConnected = false;
+// Inicialização Singleton do Firebase
+const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth: Auth = getAuth(app);
+const db: Firestore = getFirestore(app);
 
-function initializeFirebase() {
-  if (getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApp();
-  }
-  auth = getAuth(app);
-  db = getFirestore(app);
-
-  if (process.env.NODE_ENV === 'development' && !emulatorsConnected) {
-    // try {
+// Conectar aos emuladores apenas em ambiente de desenvolvimento
+// O SDK do Firebase gerencia a reconexão para nós.
+if (process.env.NODE_ENV === 'development') {
+    try {
         connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-        connectFirestoreEmulator(db, '127.0.0.1', 8080, { ssl: false });
-        emulatorsConnected = true;
-    // } catch (error) {
-        // console.warn("Error connecting to emulators. It's likely they are already connected.", error);
-    // }
-  }
+        connectFirestoreEmulator(db, '127.0.0.1', 8080);
+    } catch (error) {
+        // Isso pode acontecer se o Fast Refresh tentar reconectar.
+        // O SDK já está conectado, então podemos ignorar o erro.
+        // console.log("Emulators already connected.");
+    }
 }
 
-// Chame a inicialização imediatamente no escopo do módulo.
-initializeFirebase();
-
+// Exporta uma função getFirebase para consistência, embora as instâncias já estejam inicializadas.
 export function getFirebase() {
-  // A inicialização já aconteceu, apenas retorne as instâncias.
   return { app, auth, db };
 }
