@@ -55,7 +55,6 @@ export function Comments({ topicType, topicId }: CommentsProps) {
       setComments(commentsData);
       setIsFetching(false);
     }, (error) => {
-        console.error("Error fetching comments: ", error);
         toast({
             variant: "destructive",
             title: "Erro ao carregar comentários",
@@ -98,7 +97,6 @@ export function Comments({ topicType, topicId }: CommentsProps) {
       });
       setNewComment("");
     } catch (error) {
-      console.error("Error adding comment: ", error);
       toast({
         variant: "destructive",
         title: "Erro ao comentar",
