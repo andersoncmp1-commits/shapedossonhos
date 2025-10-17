@@ -1,6 +1,7 @@
+
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { initializeFirestore, memoryLocalCache, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
+import { initializeFirestore, memoryLocalCache, CACHE_SIZE_UNLIMITED, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -22,5 +23,10 @@ const db = initializeFirestore(app, {
     cacheSizeBytes: CACHE_SIZE_UNLIMITED
   })
 });
+
+// Conecta ao emulador do Firestore em ambiente de desenvolvimento
+if (typeof window !== 'undefined' && window.location.hostname === "localhost") {
+  connectFirestoreEmulator(db, 'localhost', 8080);
+}
 
 export { db };
