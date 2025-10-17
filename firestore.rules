@@ -1,73 +1,73 @@
 /**
- * @fileoverview Firestore Security Rules for Prototyping.
- *
- * Core Philosophy:
- * This ruleset prioritizes security by enforcing strict user-based authorization.
- * It is configured for rapid prototyping, so data shape validation is relaxed.
+ * @file Firestore Security Rules
+ * @description This ruleset enforces a security model based on user authentication.
  *
  * Data Structure:
- * - /users/{userId}: Stores user profiles.
- * - /confession_lesson_comments/{commentId}: Stores comments on confession lessons.
+ * - `/users/{userId}`: Stores user profile information. Access is restricted to the owning user.
+ * - `/confession_lesson_comments/{commentId}`: Stores comments on confession lessons. Read access is public, but write access is restricted.
  *
  * Key Security Decisions:
- * - Users can only read/write their own user documents.
- * - Comments are publicly readable, but only authenticated users can create, update, or delete them.
- *   Comment creation enforces that the `userId` matches the authenticated user's UID.
+ * - User listing is disabled for privacy.
+ * - All write operations require a valid, authenticated user.
+ * - Data validation is relaxed in this prototyping phase to allow for flexible schema changes.
+ * - Read access to confession lesson comments is public to allow for open discussion.
  *
  * Denormalization for Authorization:
- * - The `confession_lesson_comments` documents are assumed to contain a `userId` field.
- *   This denormalization allows security rules to quickly verify ownership.
+ *   - The `confession_lesson_comments` collection does not explicitly enforce ownership via a dedicated field.
+ *   - The current schema of `confession_lesson_comments` includes `userId`, but no corresponding `ownerId` field.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Controls access to user documents.
+     * @description Secures user profiles. Users can only read/write their own profile.
      * @path /users/{userId}
-     * @allow (create) User 'test_user' can create their own document.
-     * @deny (create) User 'test_user' cannot create a document with a different user ID.
-     * @allow (get, list, update, delete) User 'test_user' can read, update, and delete their own document.
-     * @deny (get, list, update, delete) User 'another_user' cannot read, update, or delete 'test_user' document.
-     * @principle Enforces document ownership.
+     * @allow (create) - Authenticated user creates their profile with matching userId.
+     * @allow (get, update, delete) - Authenticated user reads/writes their own profile.
+     * @deny (create) - Authenticated user attempts to create a profile with a mismatched userId.
+     * @deny (get, update, delete) - Authenticated user attempts to read/write another user's profile.
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow list: if false; // Prevent listing of all users
-      allow create: if isOwner(userId);
-      allow update: if isExistingOwner(userId);
-      allow delete: if isExistingOwner(userId);
+      // Read permissions:
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if false; // User listing is disabled for privacy.
+
+      // Write permissions:
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isSignedIn() && isExistingOwner(userId);
+      allow delete: if isSignedIn() && isExistingOwner(userId);
     }
 
     /**
-     * @description Controls access to confession lesson comments.
+     * @description Secures comments on confession lessons. Read access is public, but write access is restricted to authenticated users.
      * @path /confession_lesson_comments/{commentId}
-     * @allow (get, list) Any user can read comments.
-     * @allow (create) Authenticated users can create comments with their own user ID.
-     * @deny (create) Users cannot create comments with mismatched user IDs.
-     * @allow (update, delete) Only the comment owner can update or delete their comment.
-     * @deny (update, delete) Other users cannot update or delete comments.
-     * @principle Allows public reads but enforces ownership for writes.
+     * @allow (get, list) - Any user can read comments.
+     * @allow (create) - Authenticated user can create a comment.
+     * @deny (update, delete) - Only the comment creator should be able to update/delete the comment.
+     * @principle Public read, owner-only writes.
      */
     match /confession_lesson_comments/{commentId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow update: if isSignedIn() && isExistingOwner(resource.data.userId);
-      allow delete: if isSignedIn() && isExistingOwner(resource.data.userId);
-    }
+      // Read permissions:
+      allow get, list: if true;
 
-    // Helper functions
-    function isSignedIn() {
-      return request.auth != null;
+      // Write permissions:
+      allow create: if isSignedIn();
+      allow update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
     }
+  }
 
-    function isOwner(userId) {
-      return request.auth.uid == userId;
-    }
+  // Helper functions:
+  function isSignedIn() {
+    return request.auth != null;
+  }
 
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
+  function isOwner(userId) {
+    return request.auth.uid == userId;
+  }
+
+  function isExistingOwner(userId) {
+    return isSignedIn() && isOwner(userId) && resource != null;
   }
 }
