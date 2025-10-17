@@ -1,20 +1,24 @@
+
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Regras para os comentários das aulas de confissão
+    // Regra para a coleção de comentários das aulas de confissão
     match /confession_lesson_comments/{commentId} {
-      // Permite que qualquer usuário autenticado leia, liste e crie comentários.
-      // A criação é segura, pois o ID do usuário é verificado na regra.
-      allow list, read: if request.auth != null;
+      // Permite que qualquer usuário autenticado leia (get, list) os comentários.
+      allow read: if request.auth != null;
+      
+      // Permite que um usuário autenticado crie um comentário,
+      // mas somente se o 'userId' do comentário for o seu próprio.
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
 
-    // Regras para o progresso do usuário (módulos e aulas)
+    // Regras para a coleção de usuários
     match /users/{userId} {
-      // Permite que um usuário leia e escreva apenas em seu próprio documento.
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Permite que um usuário leia e atualize seu próprio documento.
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      // Permite a criação de um documento de usuário ao se registrar.
+      allow create: if request.auth != null;
     }
   }
 }
