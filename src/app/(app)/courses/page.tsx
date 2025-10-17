@@ -18,7 +18,7 @@ export default function CoursesPage() {
       id: 'como-se-confessar-melhor',
       title: 'Curso: Como se Confessar melhor',
       description: 'Aprenda o passo a passo para fazer uma boa confissão e receber a misericórdia de Deus.',
-      imageUrl: 'https://picsum.photos/seed/confession/1024/1024',
+      imageUrl: 'https://i.imgur.com/eCbX9Ky.png',
       imageHint: 'priest confession',
       modulesCount: 6,
       href: '/courses/como-se-confessar-melhor', 
