@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { db } from "@/lib/firebase";
+import { getFirebase } from "@/lib/firebase";
 import { collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp, Timestamp, CollectionReference } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -37,11 +37,12 @@ export function Comments({ topicType, topicId }: CommentsProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const { db } = getFirebase();
 
   const commentsCollectionName = `${topicType}_comments`;
 
   useEffect(() => {
-    if (!topicId) return;
+    if (!topicId || !db) return;
 
     setIsFetching(true);
     const commentsCollectionRef = collection(db, commentsCollectionName) as CollectionReference<Omit<Comment, 'id'>>;
@@ -68,7 +69,7 @@ export function Comments({ topicType, topicId }: CommentsProps) {
     });
 
     return () => unsubscribe();
-  }, [topicId, commentsCollectionName, toast]);
+  }, [topicId, commentsCollectionName, toast, db]);
 
   const handleAddComment = async () => {
     if (!user) {

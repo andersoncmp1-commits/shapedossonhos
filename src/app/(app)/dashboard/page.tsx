@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { doc, getDoc, setDoc, arrayUnion, updateDoc, arrayRemove } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getFirebase } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { ModuleCard } from "@/components/dashboard/ModuleCard";
 import { modules, type Module } from "@/lib/modules";
@@ -22,10 +22,11 @@ export default function CourseDetailPage() {
   const [completedModules, setCompletedModules] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+  const { db } = getFirebase();
 
   useEffect(() => {
     const fetchProgress = async () => {
-      if (user) {
+      if (user && db) {
         try {
           const userDocRef = doc(db, "users", user.uid);
           const userDoc = await getDoc(userDocRef);
@@ -56,10 +57,10 @@ export default function CourseDetailPage() {
     };
 
     fetchProgress();
-  }, [user, toast]);
+  }, [user, toast, db]);
   
   const handleToggleComplete = async (moduleId: string) => {
-    if (!user) return;
+    if (!user || !db) return;
     
     const userDocRef = doc(db, "users", user.uid);
     const isCompleted = completedModules.includes(moduleId);

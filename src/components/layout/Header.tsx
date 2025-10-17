@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { useAuth } from "@/hooks/useAuth";
-import { auth } from "@/lib/firebase";
+import { getFirebase } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ import { LogOut, User as UserIcon, BookMarked } from "lucide-react";
 export function Header() {
   const { user } = useAuth();
   const router = useRouter();
+  const { auth } = getFirebase();
 
   const handleLogout = async () => {
     await signOut(auth);

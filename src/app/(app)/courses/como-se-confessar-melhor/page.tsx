@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { doc, getDoc, setDoc, arrayUnion, updateDoc, arrayRemove } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getFirebase } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { lessons, type Lesson } from "@/lib/confession-modules";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +20,7 @@ import { FirestorePermissionError } from "@/lib/errors";
 export default function ConfessionCoursePage() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { db } = getFirebase();
 
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ export default function ConfessionCoursePage() {
 
   useEffect(() => {
     const fetchProgress = async () => {
-      if (user) {
+      if (user && db) {
         try {
           const userDocRef = doc(db, "users", user.uid);
           const userDoc = await getDoc(userDocRef);
@@ -62,10 +63,10 @@ export default function ConfessionCoursePage() {
     };
 
     fetchProgress();
-  }, [user, toast]);
+  }, [user, toast, db]);
 
   const handleToggleComplete = async () => {
-    if (!user) {
+    if (!user || !db) {
         toast({
             variant: "destructive",
             title: "Acesso negado",
