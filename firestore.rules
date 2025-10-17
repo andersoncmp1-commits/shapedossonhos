@@ -1,19 +1,13 @@
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Permite que usuários leiam e atualizem seu próprio documento
     match /users/{userId} {
-      allow read, update, create: if request.auth.uid == userId;
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-
-    // Regras para a coleção de comentários das aulas de confissão
-    match /confession_lesson_comments/{document=**} {
-      // Qualquer usuário autenticado pode ler (get) e listar (list) comentários.
+    match /confession_lesson_comments/{commentId} {
+      // Authenticated users can read and list comments.
       allow read: if request.auth != null;
-      
-      // Um usuário autenticado só pode criar um comentário se o 'userId' no novo documento
-      // for o mesmo que o seu próprio ID de usuário.
+      // An authenticated user can create a comment if their UID matches the userId in the document.
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
   }
