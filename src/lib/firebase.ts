@@ -29,7 +29,6 @@ function initializeFirebase() {
             connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
             connectFirestoreEmulator(db, '127.0.0.1', 8080);
             emulatorsConnected = true;
-            console.log('Successfully connected to Firebase emulators.');
         }
     } else {
         app = getApp();
