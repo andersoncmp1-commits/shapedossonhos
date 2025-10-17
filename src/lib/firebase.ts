@@ -26,7 +26,7 @@ function initializeFirebase() {
   auth = getAuth(app);
   db = getFirestore(app);
 
-  if (!emulatorsConnected) {
+  if (process.env.NODE_ENV === 'development' && !emulatorsConnected) {
     connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
     connectFirestoreEmulator(db, '127.0.0.1', 8080, { ssl: false });
     emulatorsConnected = true;
