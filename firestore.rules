@@ -1,19 +1,27 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /confession_lesson_comments/{document=**} {
-      // Qualquer usuário autenticado pode ler (get) e listar (list) comentários.
-      allow read: if request.auth != null;
-      
-      // Um usuário autenticado pode criar (create) um comentário se o 'userId' do novo
-      // documento for o mesmo que o seu próprio ID de usuário (uid).
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+
+    // Regras para a coleção de usuários
+    match /users/{userId} {
+      // Permite que um usuário crie, leia, atualize e exclua seu próprio documento.
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+    }
+
+    // Regras para a coleção de comentários das lições de confissão
+    match /confession_lesson_comments/{commentId} {
+      // Permite que qualquer usuário autenticado leia um comentário individual.
+      allow get: if request.auth != null;
     }
     
-    // As regras para a coleção de usuários permanecem as mesmas.
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    match /confession_lesson_comments {
+        // Permite que um usuário autenticado liste comentários, mas apenas se a consulta filtrar por topicId.
+        // Isso é essencial para alinhar a regra com a consulta do app.
+        allow list: if request.auth != null && 'topicId' in request.query.where;
+        
+        // Permite que um usuário autenticado crie um comentário se o 'userId' no novo documento for o seu próprio.
+        allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
   }
 }
