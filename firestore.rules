@@ -1,15 +1,31 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null;
+
+    // Regras para coleções de comentários (ex: confession_lesson_comments)
+    match /confession_lesson_comments/{commentId} {
+      // Permite a leitura de um comentário individual por qualquer usuário autenticado.
+      allow get: if request.auth != null;
+
+      // Não são necessárias regras de listagem aqui, pois elas são tratadas no match da coleção.
     }
-    
-    // Regra para coleções de comentários (ex: confession_lesson_comments)
-    match /{commentCollection}/{commentId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+
+    match /confession_lesson_comments {
+        // Permite a listagem de comentários APENAS se a consulta filtrar por 'topicId'.
+        // Isso é crucial para alinhar com a query do app e resolver o erro de permissão.
+        allow list: if request.auth != null && 'topicId' in request.query.get('where', {});
+
+        // Permite a criação de um novo comentário se o usuário estiver autenticado
+        // e for o autor do comentário.
+        allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Regras para a coleção de usuários
+    match /users/{userId} {
+      // Permite que um usuário leia, atualize ou delete apenas seu próprio documento.
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      // Permite a criação de um novo documento de usuário.
+      allow create: if request.auth != null;
     }
   }
 }
