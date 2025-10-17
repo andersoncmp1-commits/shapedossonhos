@@ -18,7 +18,7 @@ let db: Firestore;
 let emulatorsConnected = false;
 
 function initializeFirebase() {
-    if (!getApps().length) {
+    if (getApps().length === 0) {
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
         db = initializeFirestore(app, {
@@ -26,10 +26,8 @@ function initializeFirebase() {
         });
 
         if (!emulatorsConnected) {
-            console.log('Connecting to Firebase emulators...');
-            // Use o nome do serviço 'auth' e 'firestore' como host, que são os nomes dos serviços na rede interna do ambiente de desenvolvimento.
-            connectAuthEmulator(auth, 'http://auth:9099', { disableWarnings: true });
-            connectFirestoreEmulator(db, 'firestore', 8080);
+            connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+            connectFirestoreEmulator(db, '127.0.0.1', 8080);
             emulatorsConnected = true;
             console.log('Successfully connected to Firebase emulators.');
         }
@@ -43,8 +41,6 @@ function initializeFirebase() {
 initializeFirebase();
 
 export function getFirebase() {
-  if (!app) {
-    initializeFirebase();
-  }
+  // A inicialização já aconteceu, então apenas retornamos as instâncias.
   return { app, auth, db };
 }
