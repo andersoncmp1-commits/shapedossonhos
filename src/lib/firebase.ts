@@ -16,6 +16,7 @@ const firebaseConfig = {
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
+let emulatorsConnected = false;
 
 // Função para inicializar o Firebase (se ainda não foi inicializado)
 function initializeFirebase() {
@@ -29,13 +30,16 @@ function initializeFirebase() {
             localCache: memoryLocalCache({ cacheSizeBytes: CACHE_SIZE_UNLIMITED })
         });
         
-        // Conecta aos emuladores se estiver em ambiente de desenvolvimento (localhost)
-        if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+        // Conecta aos emuladores incondicionalmente no ambiente de desenvolvimento.
+        // A verificação de hostname foi removida pois o ambiente não é 'localhost'.
+        if (!emulatorsConnected) {
             console.log('Connecting to Firebase emulators...');
             connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
             connectFirestoreEmulator(db, 'localhost', 8080);
+            emulatorsConnected = true;
             console.log('Connected to Firebase emulators.');
         }
+
     } else {
         // Se já inicializado, apenas obtenha as instâncias existentes
         app = getApp();
@@ -49,5 +53,9 @@ initializeFirebase();
 
 // Função que os componentes usarão para obter as instâncias já configuradas
 export function getFirebase() {
+  // Garante a inicialização antes de retornar as instâncias
+  if (!app) {
+    initializeFirebase();
+  }
   return { app, auth, db };
 }
