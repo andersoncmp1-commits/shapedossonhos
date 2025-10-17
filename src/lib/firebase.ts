@@ -20,7 +20,7 @@ const db = getFirestore(app);
 // Conecta aos emuladores no ambiente de desenvolvimento.
 // O SDK do Firebase é inteligente para não reconectar se já estiver conectado.
 connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-connectFirestoreEmulator(db, '127.0.0.1', 8080);
+connectFirestoreEmulator(db, '127.0.0.1', 8080, { ssl: false });
 
 
 export function getFirebase() {
