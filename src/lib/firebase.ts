@@ -20,11 +20,7 @@ let emulatorsConnected = false;
 
 // Função para inicializar o Firebase (se ainda não foi inicializado)
 function initializeFirebase() {
-    if (getApps().length) {
-        app = getApp();
-        auth = getAuth(app);
-        db = getFirestore(app);
-    } else {
+    if (!getApps().length) {
         // Inicializa o Firebase App
         app = initializeApp(firebaseConfig);
         
@@ -33,17 +29,21 @@ function initializeFirebase() {
         db = initializeFirestore(app, {
             localCache: memoryLocalCache({ cacheSizeBytes: CACHE_SIZE_UNLIMITED })
         });
-    }
 
-    // Conecta aos emuladores incondicionalmente no ambiente de desenvolvimento.
-    // A verificação de hostname foi removida pois o ambiente não é 'localhost'.
-    // Esta verificação garante que a conexão só ocorra uma vez.
-    if (!emulatorsConnected) {
-        console.log('Connecting to Firebase emulators...');
-        connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-        connectFirestoreEmulator(db, '127.0.0.1', 8080);
-        emulatorsConnected = true;
-        console.log('Connected to Firebase emulators.');
+        // Conecta aos emuladores incondicionalmente no ambiente de desenvolvimento.
+        // A verificação de hostname foi removida pois o ambiente não é 'localhost'.
+        // Esta verificação garante que a conexão só ocorra uma vez.
+        if (!emulatorsConnected) {
+            console.log('Connecting to Firebase emulators...');
+            connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+            connectFirestoreEmulator(db, '127.0.0.1', 8080);
+            emulatorsConnected = true;
+            console.log('Connected to Firebase emulators.');
+        }
+    } else {
+        app = getApp();
+        auth = getAuth(app);
+        db = getFirestore(app);
     }
 }
 
