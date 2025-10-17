@@ -19,19 +19,13 @@ const db: Firestore = getFirestore(app);
 
 // Conectar aos emuladores apenas em ambiente de desenvolvimento
 if (process.env.NODE_ENV === 'development') {
-    // O SDK do Firebase gerencia a reconexão para nós.
     // Usar 'localhost' é mais robusto para ambientes com port forwarding.
-    try {
-        connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-        connectFirestoreEmulator(db, 'localhost', 8080);
-    } catch (error) {
-        // Isso pode acontecer se o Fast Refresh tentar reconectar.
-        // O SDK já está conectado, então podemos ignorar o erro com segurança.
-        // console.log("Emulators already connected.");
-    }
+    // O SDK do Firebase gerencia a reconexão para nós, então não precisamos de try/catch.
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+    connectFirestoreEmulator(db, 'localhost', 8080);
 }
 
-// Exporta uma função getFirebase para consistência, embora as instâncias já estejam inicializadas.
+// Exporta uma função getFirebase para consistência em toda a aplicação.
 export function getFirebase() {
   return { app, auth, db };
 }
