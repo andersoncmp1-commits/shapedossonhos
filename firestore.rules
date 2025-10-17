@@ -2,8 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Regra global que permite acesso completo.
-    // ATENÇÃO: Isto não é seguro para produção.
+    // Regra global que permite acesso total para desenvolvimento.
+    // AVISO: Isso não é seguro para produção.
     match /{document=**} {
       allow read, write: if true;
     }
