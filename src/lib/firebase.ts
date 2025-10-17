@@ -12,27 +12,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-let app: FirebaseApp;
-let auth: Auth;
-let db: Firestore;
-
-if (getApps().length === 0) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApp();
-}
-
-auth = getAuth(app);
-db = getFirestore(app);
+// Initialize Firebase
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // Conecta aos emuladores no ambiente de desenvolvimento
-// O bloco try/catch evita erros de "already connected" durante o hot-reloading do Next.js
-try {
-    connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-    connectFirestoreEmulator(db, '127.0.0.1', 8080);
-} catch (e) {
-    // console.log("Emulators already connected.");
-}
+// O SDK do Firebase é inteligente para não reconectar se já estiver conectado.
+connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
 
 export function getFirebase() {
