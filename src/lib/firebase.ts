@@ -27,9 +27,13 @@ function initializeFirebase() {
   db = getFirestore(app);
 
   if (process.env.NODE_ENV === 'development' && !emulatorsConnected) {
-    connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-    connectFirestoreEmulator(db, '127.0.0.1', 8080, { ssl: false });
-    emulatorsConnected = true;
+    // try {
+        connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+        connectFirestoreEmulator(db, '127.0.0.1', 8080, { ssl: false });
+        emulatorsConnected = true;
+    // } catch (error) {
+        // console.warn("Error connecting to emulators. It's likely they are already connected.", error);
+    // }
   }
 }
 
