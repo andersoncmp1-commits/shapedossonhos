@@ -1,7 +1,7 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
-import { getAuth, connectAuthEmulator, type Auth } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, type Firestore } from "firebase/firestore";
+import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,13 +16,6 @@ const firebaseConfig = {
 const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth: Auth = getAuth(app);
 const db: Firestore = getFirestore(app);
-
-// Conectar aos emuladores apenas em ambiente de desenvolvimento
-// O SDK do Firebase gerencia a reconexão para nós.
-if (process.env.NODE_ENV === 'development') {
-    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-    connectFirestoreEmulator(db, 'localhost', 8080);
-}
 
 // Exporta uma função getFirebase para consistência em toda a aplicação.
 export function getFirebase() {
