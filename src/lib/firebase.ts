@@ -15,27 +15,25 @@ const firebaseConfig = {
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
-let emulatorsConnected = false;
 
-function initializeFirebase() {
-    if (getApps().length === 0) {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-
-        if (!emulatorsConnected) {
-            connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-            connectFirestoreEmulator(db, '127.0.0.1', 8080);
-            emulatorsConnected = true;
-        }
-    } else {
-        app = getApp();
-        auth = getAuth(app);
-        db = getFirestore(app);
-    }
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
 }
 
-initializeFirebase();
+auth = getAuth(app);
+db = getFirestore(app);
+
+// Conecta aos emuladores no ambiente de desenvolvimento
+// O bloco try/catch evita erros de "already connected" durante o hot-reloading do Next.js
+try {
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+    connectFirestoreEmulator(db, '127.0.0.1', 8080);
+} catch (e) {
+    // console.log("Emulators already connected.");
+}
+
 
 export function getFirebase() {
   return { app, auth, db };
