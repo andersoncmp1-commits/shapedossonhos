@@ -34,8 +34,8 @@ function initializeFirebase() {
         // A verificação de hostname foi removida pois o ambiente não é 'localhost'.
         if (!emulatorsConnected) {
             console.log('Connecting to Firebase emulators...');
-            connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-            connectFirestoreEmulator(db, 'localhost', 8080);
+            connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+            connectFirestoreEmulator(db, '127.0.0.1', 8080);
             emulatorsConnected = true;
             console.log('Connected to Firebase emulators.');
         }
