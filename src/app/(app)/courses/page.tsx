@@ -20,8 +20,8 @@ export default function CoursesPage() {
       description: 'Aprenda o passo a passo para fazer uma boa confissão e receber a misericórdia de Deus.',
       imageUrl: 'https://picsum.photos/seed/confession/1024/1024',
       imageHint: 'priest confession',
-      modulesCount: 5,
-      href: '#', 
+      modulesCount: 6,
+      href: '/courses/como-se-confessar-melhor', 
     },
   ];
 
