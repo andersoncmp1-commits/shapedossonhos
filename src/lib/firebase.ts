@@ -19,6 +19,7 @@ function initializeFirebase() {
   if (!getApps().length) {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
+    // Use initializeFirestore para mais controle, especialmente com o cache de memória.
     db = initializeFirestore(app, {
       localCache: memoryLocalCache({ cacheSizeBytes: CACHE_SIZE_UNLIMITED })
     });
@@ -30,24 +31,16 @@ function initializeFirebase() {
       console.log('Connected to Firebase emulators.');
     }
   } else {
+    // Se o app já existe, apenas obtenha as instâncias.
+    // A conexão com o emulador já terá sido feita na primeira chamada.
     app = getApp();
     auth = getAuth(app);
-    // Para db, precisamos ter certeza de que ele foi inicializado com cache,
-    // então reutilizamos a instância se já existir ou criamos uma nova.
-    // Esta lógica pode precisar de ajuste dependendo de como `db` é exposto.
-    // Por enquanto, a lógica assume que `db` será inicializado uma vez com `auth`.
-    if (!db) {
-       db = initializeFirestore(app, {
-         localCache: memoryLocalCache({ cacheSizeBytes: CACHE_SIZE_UNLIMITED })
-       });
-       if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-          connectFirestoreEmulator(db, 'localhost', 8080);
-       }
-    }
+    db = getFirestore(app);
   }
   return { app, auth, db };
 }
 
 export function getFirebase() {
+  // A função initializeFirebase agora gerencia a idempotência.
   return initializeFirebase();
 }
