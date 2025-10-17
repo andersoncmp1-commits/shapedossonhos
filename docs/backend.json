@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "user": {
+      "title": "User",
+      "description": "A user of the application",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "completedModules": {
+          "type": "array",
+          "description": "List of completed module IDs.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "completedConfessionLessons": {
+          "type": "array",
+          "description": "List of completed confession lesson IDs.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["email"]
+    },
+    "confession_lesson_comment": {
+      "title": "Confession Lesson Comment",
+      "description": "A comment on a confession lesson",
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "userPhotoURL": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["topicId", "userId", "userName", "text", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": ["password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/user"
+      },
+      "description": "User documents, keyed by user ID."
+    },
+    "/confession_lesson_comments/{commentId}": {
+      "schema": {
+        "$ref": "#/entities/confession_lesson_comment"
+      },
+      "description": "Comments on confession lessons."
+    }
+  }
+}
