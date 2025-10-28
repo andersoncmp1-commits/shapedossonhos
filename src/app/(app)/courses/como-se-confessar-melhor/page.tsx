@@ -13,7 +13,6 @@ import { ArrowLeft, CheckCircle, Circle, Play, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Comments } from "@/components/features/Comments";
 import { errorEmitter } from "@/lib/error-emitter";
 import { FirestorePermissionError } from "@/lib/errors";
 
@@ -184,12 +183,6 @@ export default function ConfessionCoursePage() {
                     <Check className="mr-2 h-4 w-4" />
                     {isCurrentLessonCompleted ? "Desmarcar como concluída" : "Marcar como concluída"}
                   </Button>
-                </div>
-                <div className="mt-8">
-                  <Comments 
-                      topicType="confession_lesson"
-                      topicId={selectedLesson.id} 
-                  />
                 </div>
             </main>
         </div>
