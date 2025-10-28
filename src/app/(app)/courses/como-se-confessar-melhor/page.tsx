@@ -15,7 +15,7 @@ export default function FunctionalExercisesPage() {
       description: 'Comece seu dia com mais flexibilidade e disposição. Ideal para iniciantes.',
       imageUrl: 'https://picsum.photos/seed/stretching/1024/768',
       imageHint: 'person stretching',
-      href: '#',
+      href: '/courses/exercicios-funcionais/alongamento-start',
     },
     {
       id: 'mobilidade-plena',
