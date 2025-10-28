@@ -16,8 +16,8 @@ export default function CoursesPage() {
       href: '#', 
     },
     {
-      id: 'dietas',
-      title: 'Dietas',
+      id: 'planos-alimentares',
+      title: 'Planos Alimentares',
       description: 'Encontre planos de dieta personalizados para seus objetivos de saúde e bem-estar.',
       imageUrl: 'https://picsum.photos/seed/diet/1024/1024',
       imageHint: 'healthy food',
@@ -25,8 +25,8 @@ export default function CoursesPage() {
       href: '/dashboard', 
     },
     {
-      id: 'exercicios',
-      title: 'Exercícios',
+      id: 'exercicios-funcionais',
+      title: 'Exercícios Funcionais',
       description: 'Acesse rotinas de exercícios para fazer em casa ou na academia e atinja suas metas.',
       imageUrl: 'https://picsum.photos/seed/exercise/1024/1024',
       imageHint: 'person exercising',
