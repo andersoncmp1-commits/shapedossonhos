@@ -31,26 +31,6 @@ export default function AlongamentoStartPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Coluna do Player de Vídeo */}
-        <div className="md:col-span-2">
-          <div className="aspect-video w-full rounded-lg overflow-hidden shadow-2xl border">
-            <iframe
-              key={selectedLesson.id}
-              width="100%"
-              height="100%"
-              src={selectedLesson.videoUrl}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          </div>
-          <div className="mt-6 text-center">
-            <h2 className="text-2xl font-bold font-headline">{selectedLesson.title}</h2>
-          </div>
-        </div>
-
         {/* Coluna da Lista de Aulas */}
         <div className="md:col-span-1">
           <Card className="overflow-hidden">
@@ -86,6 +66,26 @@ export default function AlongamentoStartPage() {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Coluna do Player de Vídeo */}
+        <div className="md:col-span-2">
+          <div className="aspect-video w-full rounded-lg overflow-hidden shadow-2xl border">
+            <iframe
+              key={selectedLesson.id}
+              width="100%"
+              height="100%"
+              src={selectedLesson.videoUrl}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            ></iframe>
+          </div>
+          <div className="mt-6 text-center">
+            <h2 className="text-2xl font-bold font-headline">{selectedLesson.title}</h2>
+          </div>
         </div>
       </div>
     </div>
