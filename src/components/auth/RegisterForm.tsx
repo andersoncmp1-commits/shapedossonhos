@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -7,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 import { getFirebase } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +23,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader } from "@/components/ui/loader";
+import { errorEmitter } from "@/lib/error-emitter";
+import { FirestorePermissionError } from "@/lib/errors";
 
 const formSchema = z
   .object({
@@ -37,7 +41,7 @@ export function RegisterForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { auth } = getFirebase();
+  const { auth, db } = getFirebase();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +55,30 @@ export function RegisterForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      if (user) {
+        // Cria o documento do usuário no Firestore
+        const userDocRef = doc(db, "users", user.uid);
+        const userData = {
+          email: user.email,
+          completedModules: [],
+          completedConfessionLessons: [],
+        };
+        await setDoc(userDocRef, userData)
+          .catch(serverError => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'create',
+              requestResourceData: userData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+            // Lançar o erro novamente para que ele possa ser capturado pelo bloco catch principal se necessário
+            throw permissionError;
+          });
+      }
+
       toast({
         title: "Conta criada com sucesso!",
         description: "Você será redirecionado para a página de cursos.",
@@ -62,6 +89,8 @@ export function RegisterForm() {
       let description = "Ocorreu um erro ao criar sua conta. Tente novamente.";
       if (error.code === 'auth/email-already-in-use') {
         description = "Este email já está em uso por outra conta.";
+      } else if (error instanceof FirestorePermissionError) {
+        description = "Não foi possível salvar os dados do usuário. Contacte o suporte."
       }
       toast({
         variant: "destructive",
