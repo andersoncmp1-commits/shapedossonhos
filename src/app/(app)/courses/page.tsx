@@ -30,7 +30,7 @@ export default function CoursesPage() {
       description: 'Acesse rotinas de exercícios para fazer em casa ou na academia e atinja suas metas.',
       imageUrl: 'https://picsum.photos/seed/exercise/1024/1024',
       imageHint: 'person exercising',
-      modulesCount: 6,
+      modulesCount: 5,
       href: '/courses/como-se-confessar-melhor', 
     },
     {
