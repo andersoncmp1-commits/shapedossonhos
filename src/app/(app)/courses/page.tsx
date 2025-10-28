@@ -7,6 +7,15 @@ import Image from 'next/image';
 export default function CoursesPage() {
   const courses = [
     {
+      id: 'comece-por-aqui',
+      title: 'Comece Por Aqui',
+      description: 'O seu guia inicial para uma jornada de transformação e bem-estar completo.',
+      imageUrl: 'https://picsum.photos/seed/start/1024/1024',
+      imageHint: 'path beginning',
+      modulesCount: 4,
+      href: '#', 
+    },
+    {
       id: 'dietas',
       title: 'Dietas',
       description: 'Encontre planos de dieta personalizados para seus objetivos de saúde e bem-estar.',
@@ -31,7 +40,52 @@ export default function CoursesPage() {
       imageUrl: 'https://picsum.photos/seed/recipes/1024/1024',
       imageHint: 'healthy cooking',
       modulesCount: 10,
-      href: '#', // TODO: Crie a página para este curso
+      href: '#',
+    },
+     {
+      id: 'jejum-intermitente',
+      title: 'Jejum Intermitente',
+      description: 'Aprenda os segredos e benefícios do jejum intermitente para potencializar seus resultados.',
+      imageUrl: 'https://picsum.photos/seed/fasting/1024/1024',
+      imageHint: 'clock time',
+      modulesCount: 5,
+      href: '#',
+    },
+    {
+      id: 'sucos-detox',
+      title: 'Sucos Detox',
+      description: 'Receitas de sucos detox para limpar o organismo e renovar suas energias.',
+      imageUrl: 'https://picsum.photos/seed/detox/1024/1024',
+      imageHint: 'green juice',
+      modulesCount: 7,
+      href: '#',
+    },
+    {
+      id: 'chas-secretos',
+      title: 'Chás Secretos para Secar',
+      description: 'Descubra chás poderosos que ajudam a acelerar o metabolismo e a queima de gordura.',
+      imageUrl: 'https://picsum.photos/seed/tea/1024/1024',
+      imageHint: 'cup of tea',
+      modulesCount: 9,
+      href: '#',
+    },
+    {
+      id: 'shots-matinais',
+      title: 'Shots Matinais',
+      description: 'Comece o dia com shots matinais que dão um boost na sua imunidade e energia.',
+      imageUrl: 'https://picsum.photos/seed/shots/1024/1024',
+      imageHint: 'health shot',
+      modulesCount: 12,
+      href: '#',
+    },
+    {
+      id: 'marmitas-fitness',
+      title: 'Marmitas Fitness',
+      description: 'Aprenda a preparar marmitas práticas e saudáveis para a semana toda.',
+      imageUrl: 'https://picsum.photos/seed/mealprep/1024/1024',
+      imageHint: 'meal prep containers',
+      modulesCount: 8,
+      href: '#',
     },
   ];
 
