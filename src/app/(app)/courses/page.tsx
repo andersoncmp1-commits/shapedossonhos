@@ -75,7 +75,7 @@ export default function CoursesPage() {
       imageUrl: 'https://i.imgur.com/2OEIa3L.png',
       imageHint: 'health shot',
       modulesCount: 12,
-      href: '#',
+      href: '/courses/shots-matinais',
     },
     {
       id: 'marmitas-fitness',
