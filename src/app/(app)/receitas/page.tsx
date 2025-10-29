@@ -16,6 +16,13 @@ export default function ReceitasPage() {
       imageHint: 'vegan food',
       href: '/receitas/veganas',
     },
+    {
+      id: 'receitas-low-carb',
+      title: 'Receitas Low Carb',
+      imageUrl: 'https://picsum.photos/seed/lowcarb1/1080/1920',
+      imageHint: 'low carb meal',
+      href: '/receitas/low-carb',
+    },
   ];
 
   return (
