@@ -48,10 +48,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    // This is to suppress the cross-origin warning in the dev environment.
-    allowedDevOrigins: [],
-  },
 };
 
 export default nextConfig;
