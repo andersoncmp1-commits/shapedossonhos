@@ -25,8 +25,8 @@
     --popover: 215 28% 12%;
     --popover-foreground: 40 43% 97%;
 
-    /* Cor primária para botões e links importantes (Dourado Reluzente: #C7A348) */
-    --primary: 45 52% 53%;
+    /* Cor primária para botões e links importantes (Dourado Reluzente: #deaa2c) */
+    --primary: 45 74% 52%;
     --primary-foreground: 215 28% 17%;
 
     /* Cor secundária para elementos de menor destaque (Azul Profundo: #0B2E59) */
@@ -38,7 +38,7 @@
     --muted-foreground: 40 43% 85%;
 
     /* Cor de destaque para hovers (Dourado com mais brilho) */
-    --accent: 45 52% 43%;
+    --accent: 45 74% 42%;
     --accent-foreground: 40 43% 97%;
     
     /* Cor para ações destrutivas/erros (Vermelho Carmesim: #8A1C21) */
@@ -50,7 +50,7 @@
     /* Cor do fundo de inputs */
     --input: 215 28% 25%;
     /* Cor do anel de foco */
-    --ring: 45 52% 53%;
+    --ring: 45 74% 52%;
 
     --radius: 0.5rem;
   }
