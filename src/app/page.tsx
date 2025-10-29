@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -9,6 +10,13 @@ export default function Home() {
         <section className="w-full py-20 md:py-32 lg:py-48 flex items-center justify-center">
           <div className="container px-4 md:px-6 text-center">
             <div className="max-w-3xl mx-auto space-y-4">
+              <Image 
+                src="https://i.imgur.com/kE9X1yS.png"
+                alt="Shape dos Sonhos Logo"
+                width={128}
+                height={128}
+                className="mx-auto mb-6"
+              />
               <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-200 to-primary">
                 Shape dos Sonhos
               </h1>

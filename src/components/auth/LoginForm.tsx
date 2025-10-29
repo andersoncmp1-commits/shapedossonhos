@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Image from "next/image";
 
 import { getFirebase } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -65,7 +66,13 @@ export function LoginForm() {
   return (
     <div className="animate-fade-in">
       <div className="text-center mb-8">
-        <h1 className="font-headline text-3xl font-bold text-primary">Shape dos Sonhos</h1>
+        <Image 
+          src="https://i.imgur.com/kE9X1yS.png"
+          alt="Shape dos Sonhos Logo"
+          width={96}
+          height={96}
+          className="mx-auto mb-4"
+        />
         <p className="text-muted-foreground font-display">Bem-vindo(a) de volta!</p>
       </div>
       <Form {...form}>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { getFirebase } from "@/lib/firebase";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +32,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center space-x-4 px-4 sm:justify-between sm:space-x-0">
-        <Link href="/courses" className="flex items-center gap-2">
+        <Link href="/courses" className="flex items-center gap-3">
+           <Image
+            src="https://i.imgur.com/kE9X1yS.png"
+            alt="Shape dos Sonhos Logo"
+            width={32}
+            height={32}
+          />
           <h1 className="font-headline text-2xl font-bold text-primary">Shape dos Sonhos</h1>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
