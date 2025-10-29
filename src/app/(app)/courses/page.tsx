@@ -10,7 +10,7 @@ export default function CoursesPage() {
       id: 'comece-por-aqui',
       title: 'Comece Por Aqui',
       description: 'O seu guia inicial para uma jornada de transformação e bem-estar completo.',
-      imageUrl: 'https://picsum.photos/seed/start/1024/1024',
+      imageUrl: 'https://i.imgur.com/bqsMdwl.png',
       imageHint: 'path beginning',
       modulesCount: 4,
       href: '/courses/comece-por-aqui', 
@@ -102,8 +102,8 @@ export default function CoursesPage() {
                  <Image 
                   src={course.imageUrl} 
                   alt={`Capa do curso ${course.title}`}
-                  width={1024}
-                  height={1024}
+                  width={1080}
+                  height={1920}
                   className="object-cover w-full h-auto aspect-video"
                   data-ai-hint={course.imageHint}
                   />
