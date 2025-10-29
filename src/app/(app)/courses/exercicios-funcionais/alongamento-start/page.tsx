@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, PlayCircle, CheckCircle } from 'lucide-react';
+import { ArrowLeft, PlayCircle } from 'lucide-react';
 import { lessons, type Lesson } from '@/lib/alongamento-start-lessons';
 import { cn } from '@/lib/utils';
 
@@ -79,8 +79,6 @@ export default function AlongamentoStartPage() {
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
             ></iframe>
           </div>
           <div className="mt-6 text-center">
