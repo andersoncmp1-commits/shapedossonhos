@@ -23,7 +23,7 @@ export default function FunctionalExercisesPage() {
       description: 'Aumente a amplitude dos seus movimentos e previna lesões.',
       imageUrl: 'https://picsum.photos/seed/mobility/1024/768',
       imageHint: 'yoga pose',
-      href: '#',
+      href: '/courses/exercicios-funcionais/mobilidade-plena',
     },
     {
       id: 'bumbum-redondinho',
