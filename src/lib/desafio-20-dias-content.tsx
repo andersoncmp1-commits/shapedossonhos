@@ -260,6 +260,126 @@ const challengeContent: ChallengeDay[] = [
                 }
             },
         ]
+    },
+    {
+        day: 3,
+        meals: [
+            {
+                name: "Café da Manhã",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Café puro (1 xícara)\nPão integral (1 fatia)\nQueijo ricota (2 colheres sopa)\nUvas roxas (1 xícara)`,
+                            kcal: "227",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Mingau de Aveia\n(Receita no aplicativo)\nMorangos (8 unidades 100g)`,
+                            kcal: "177",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Omelete fácil, alface, tomate, ovo e cenoura\n(Receita no aplicativo)\nCafé sem açúcar (1 xícara)\nPêra (1 unidade)`,
+                            kcal: "116",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Lanche da Manhã",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Maçã picada (1 xícara)\nCanela em pó (1 colher de chá)`,
+                            kcal: "71",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Iogurte desnatado (160g)\nMorangos picados (8 unidades 100g)`,
+                            kcal: "73",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Ameixa em cubos (1 xícara)`,
+                            kcal: "76",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Almoço",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Arroz branco (3 colheres sopa 75g)\nFeijão cozido (1 concha rasa 80g)\nPatinho grelhado (2 filés médios 80g)\nCenoura cozida (4 colheres sopa)\nRepolho refogado (3 colheres sopa)\nPepino em rodelas (10 fatias)\nAlface cortada (à vontade)`,
+                            kcal: "312",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Arroz branco (4 colheres sopa)\nStrogonoff Fit (4 colheres sopa)\nCenoura cozida (3 colheres sopa)\nPurê de abóbora (2 colheres sopa)\nAlface e tomate (à vontade)`,
+                            kcal: "281",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Arroz branco (3 colheres sopa 75g)\nFeijão preto (3 colheres sopa 70g)\nOvo frito na água (2 unidades)\nTomate fatiado (1 xícara)\nAlface cortada (1 xícara)\nCenoura crua ralada (1 xícara)`,
+                            kcal: "334",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Lanche da Tarde",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Panqueca de banana com aveia\n(Receita no aplicativo)\nChá verde (1 xícara)`,
+                            kcal: "202",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Banana da prata em rodelas (1 unidade)\nMel (1 colher de sopa)\nChia (1 colher de sopa)`,
+                            kcal: "180",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Omelete de tomate\n(Receita no aplicativo)\nSuco de melancia natural (200ml)`,
+                            kcal: "107",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Jantar",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Alface cortada (1 xícara)\nMacarrão sem glúten (4 colheres sopa)\nOvos cozidos (2 unidades)\nBrócolis cozido (5 talos)\nTomate fatiado (1 unidade)`,
+                            kcal: "263",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Arroz branco (3 colheres sopa 75g)\nBrócolis cozido (5 talos)\nAbrobrinha refogada (3 colheres sopa 70g)\nCenoura crua ralada (3 colheres sopa)\nTomate fatiado (1 unidade)\nAlface fatiada (1 xícara)\nOvos cozidos (2 unidades)`,
+                            kcal: "291",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Purê de batata (7 colheres sopa 120g)\nFrango desfiado (5 colheres sopa 80g)\nBrócolis cozido (5 talos)\nTomate e alface (à vontade)`,
+                            kcal: "275",
+                        },
+                    ]
+                }
+            },
+        ]
     }
 ];
 
