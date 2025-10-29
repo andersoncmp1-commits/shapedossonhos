@@ -47,7 +47,7 @@ export default function FunctionalExercisesPage() {
       description: 'Um treino HIIT intenso para queimar calorias sem sair de casa.',
       imageUrl: 'https://picsum.photos/seed/hiit/1024/768',
       imageHint: 'high intensity workout',
-      href: '#',
+      href: '/courses/exercicios-funcionais/queimando-em-casa',
     },
   ];
 
