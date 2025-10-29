@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Cake, Carrot, Apple, Citrus, Banana, Strawberry } from 'lucide-react';
+import { ArrowLeft, Cake, Carrot, Apple, Citrus, Banana } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
@@ -182,7 +182,7 @@ const recipes = [
   },
   {
     title: "Bolo de Morango Low Carb",
-    icon: Strawberry,
+    icon: Cake,
     kcal: "240",
     timing: "40 Minutos",
     difficulty: "Fácil",
