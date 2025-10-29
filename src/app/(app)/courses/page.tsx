@@ -39,7 +39,7 @@ export default function CoursesPage() {
       imageUrl: 'https://i.imgur.com/gQLDEeZ.png',
       imageHint: 'healthy cooking',
       modulesCount: 10,
-      href: '#',
+      href: '/receitas',
     },
      {
       id: 'jejum-intermitente',
