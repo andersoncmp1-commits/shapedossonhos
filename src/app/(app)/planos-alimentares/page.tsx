@@ -15,7 +15,7 @@ export default function PlanosAlimentaresPage() {
       description: 'Um desafio completo para transformar seus hábitos alimentares em 20 dias.',
       imageUrl: 'https://picsum.photos/seed/challenge/1024/768',
       imageHint: 'calendar progress',
-      href: '#',
+      href: '/planos-alimentares/desafio-20-dias',
     },
     {
       id: 'reeducacao-alimentar',
