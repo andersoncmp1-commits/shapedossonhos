@@ -2,8 +2,8 @@
 "use client";
 
 import Link from 'next/link';
-import { Card, CardContent, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
@@ -69,32 +69,21 @@ export default function FunctionalExercisesPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {workouts.map((workout) => (
-          <Card key={workout.id} className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1">
-            <div className="relative">
-              <Image 
-                src={workout.imageUrl} 
-                alt={`Imagem do treino ${workout.title}`}
-                width={1024}
-                height={768}
-                className="object-cover w-full h-auto aspect-video"
+           <Link key={workout.id} href={workout.href} className="block group">
+            <Card className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 
+                             group-hover:shadow-primary/20 group-hover:shadow-lg group-hover:-translate-y-1">
+              <Image
+                src={workout.imageUrl}
+                alt={`Capa do plano ${workout.title}`}
+                width={1080}
+                height={1920}
+                className="object-cover w-full h-full aspect-[9/16]"
                 data-ai-hint={workout.imageHint}
               />
-            </div>
-            <CardContent className="p-6 flex-grow flex flex-col">
-              <CardTitle className="font-headline mb-2">{workout.title}</CardTitle>
-              <CardDescription className="font-display flex-grow">{workout.description}</CardDescription>
-            </CardContent>
-            <CardFooter className="p-6 pt-0">
-               <Button asChild className="w-full">
-                  <Link href={workout.href}>
-                    Acessar Treino
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-            </CardFooter>
-          </Card>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
