@@ -10,7 +10,7 @@ export default function Home() {
           <div className="container px-4 md:px-6 text-center">
             <div className="max-w-3xl mx-auto space-y-4">
               <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-200 to-primary">
-                Católicos de Verdade
+                Shape dos Sonhos
               </h1>
               <p className="font-display text-lg text-muted-foreground md:text-xl">
                 Um espaço sagrado para o seu desenvolvimento e aprendizado.
@@ -33,7 +33,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="flex items-center justify-center w-full h-24 border-t">
-        <p className="text-muted-foreground">&copy; {new Date().getFullYear()} Católicos de Verdade. Todos os direitos reservados.</p>
+        <p className="text-muted-foreground">&copy; {new Date().getFullYear()} Shape dos Sonhos. Todos os direitos reservados.</p>
       </footer>
     </div>
   );

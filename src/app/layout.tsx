@@ -5,7 +5,7 @@ import './globals.css';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
-  title: 'Católicos de Verdade',
+  title: 'Shape dos Sonhos',
   description: 'Sua área de membros exclusiva.',
 };
 

@@ -65,7 +65,7 @@ export function LoginForm() {
   return (
     <div className="animate-fade-in">
       <div className="text-center mb-8">
-        <h1 className="font-headline text-3xl font-bold text-primary">Católicos de Verdade</h1>
+        <h1 className="font-headline text-3xl font-bold text-primary">Shape dos Sonhos</h1>
         <p className="text-muted-foreground font-display">Bem-vindo(a) de volta!</p>
       </div>
       <Form {...form}>
