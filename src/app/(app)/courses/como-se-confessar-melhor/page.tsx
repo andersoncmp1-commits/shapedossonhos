@@ -39,7 +39,7 @@ export default function FunctionalExercisesPage() {
       description: 'Exercícios seguros e eficazes para manter a saúde durante a gravidez.',
       imageUrl: 'https://picsum.photos/seed/pregnant/1024/768',
       imageHint: 'pregnant woman exercising',
-      href: '#',
+      href: '/courses/exercicios-funcionais/treino-para-gestantes',
     },
     {
       id: 'queimando-em-casa',
