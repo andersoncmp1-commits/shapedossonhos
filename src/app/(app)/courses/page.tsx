@@ -57,7 +57,7 @@ export default function CoursesPage() {
       imageUrl: 'https://i.imgur.com/NGRLtL0.png',
       imageHint: 'green juice',
       modulesCount: 7,
-      href: '#',
+      href: '/courses/sucos-detox',
     },
     {
       id: 'chas-secretos',
