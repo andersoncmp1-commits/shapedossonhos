@@ -49,7 +49,7 @@ export default function CoursesPage() {
       imageUrl: 'https://picsum.photos/seed/fasting/1024/1024',
       imageHint: 'clock time',
       modulesCount: 5,
-      href: '#',
+      href: '/courses/jejum-intermitente',
     },
     {
       id: 'sucos-detox',
