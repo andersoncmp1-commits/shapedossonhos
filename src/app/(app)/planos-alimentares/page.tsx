@@ -2,8 +2,8 @@
 "use client";
 
 import Link from 'next/link';
-import { Card, CardContent, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
@@ -12,7 +12,6 @@ export default function PlanosAlimentaresPage() {
     {
       id: 'desafio-20-dias',
       title: 'Desafio 20 Dias',
-      description: 'Um desafio completo para transformar seus hábitos alimentares em 20 dias.',
       imageUrl: 'https://i.imgur.com/gi8XXka.png',
       imageHint: 'calendar progress',
       href: '/planos-alimentares/desafio-20-dias',
@@ -20,7 +19,6 @@ export default function PlanosAlimentaresPage() {
     {
       id: 'reeducacao-alimentar',
       title: 'Reeducação Alimentar',
-      description: 'Aprenda a fazer escolhas saudáveis e sustentáveis para a vida toda.',
       imageUrl: 'https://i.imgur.com/Z16jQTj.png',
       imageHint: 'healthy eating chart',
       href: '#',
@@ -28,7 +26,6 @@ export default function PlanosAlimentaresPage() {
     {
       id: 'dieta-do-ovo',
       title: 'Dieta do Ovo para 5 Dias',
-      description: 'Um plano de 5 dias focado em resultados rápidos com a dieta do ovo.',
       imageUrl: 'https://i.imgur.com/HzIAUQJ.png',
       imageHint: 'eggs breakfast',
       href: '#',
@@ -36,7 +33,6 @@ export default function PlanosAlimentaresPage() {
     {
       id: 'planos-impressao',
       title: 'Planos para Impressão',
-      description: 'Versões para impressão dos seus planos alimentares para fácil acesso.',
       imageUrl: 'https://i.imgur.com/kNZj7Rt.png',
       imageHint: 'printer paper',
       href: '#',
@@ -61,32 +57,21 @@ export default function PlanosAlimentaresPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {plans.map((plan) => (
-          <Card key={plan.id} className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1">
-            <div className="relative">
-              <Image 
-                src={plan.imageUrl} 
-                alt={`Imagem do plano ${plan.title}`}
-                width={1024}
-                height={768}
-                className="object-cover w-full h-auto aspect-video"
+          <Link key={plan.id} href={plan.href} className="block group">
+            <Card className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 
+                             group-hover:shadow-primary/20 group-hover:shadow-lg group-hover:-translate-y-1">
+              <Image
+                src={plan.imageUrl}
+                alt={`Capa do plano ${plan.title}`}
+                width={1080}
+                height={1920}
+                className="object-cover w-full h-full aspect-[9/16]"
                 data-ai-hint={plan.imageHint}
               />
-            </div>
-            <CardContent className="p-6 flex-grow flex flex-col">
-              <CardTitle className="font-headline mb-2">{plan.title}</CardTitle>
-              <CardDescription className="font-display flex-grow">{plan.description}</CardDescription>
-            </CardContent>
-            <CardFooter className="p-6 pt-0">
-               <Button asChild className="w-full">
-                  <Link href={plan.href}>
-                    Acessar Plano
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-            </CardFooter>
-          </Card>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
