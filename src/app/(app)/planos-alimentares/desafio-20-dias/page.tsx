@@ -9,10 +9,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Desafio20DiasPage() {
   const challengeModules = [
-    { id: 'lista-compras', title: 'Lista de Compras' },
+    { id: 'lista-compras', title: 'Lista de Compras', href: '/planos-alimentares/desafio-20-dias/lista-de-compras' },
     ...Array.from({ length: 20 }, (_, i) => ({
       id: `dia-${i + 1}`,
       title: `Dia ${i + 1}`,
+      href: '#',
     })),
   ];
 
@@ -41,7 +42,7 @@ export default function Desafio20DiasPage() {
           <ScrollArea className="h-[65vh] w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
               {challengeModules.map((module) => (
-                <Link key={module.id} href="#" passHref>
+                <Link key={module.id} href={module.href} passHref>
                   <Card className="h-full transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-primary/20 hover:shadow-lg focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium font-display">
