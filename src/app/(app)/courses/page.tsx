@@ -21,8 +21,8 @@ export default function CoursesPage() {
       description: 'Encontre planos de dieta personalizados para seus objetivos de saúde e bem-estar.',
       imageUrl: 'https://picsum.photos/seed/diet/1024/1024',
       imageHint: 'healthy food',
-      modulesCount: 8,
-      href: '/dashboard', 
+      modulesCount: 4,
+      href: '/planos-alimentares', 
     },
     {
       id: 'exercicios-funcionais',
