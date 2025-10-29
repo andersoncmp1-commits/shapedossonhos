@@ -31,7 +31,7 @@ export default function FunctionalExercisesPage() {
       description: 'Treino focado em fortalecer e tonificar os glúteos para um resultado visível.',
       imageUrl: 'https://picsum.photos/seed/glutes/1024/768',
       imageHint: 'leg workout',
-      href: '#',
+      href: '/courses/exercicios-funcionais/bumbum-redondinho',
     },
     {
       id: 'treino-para-gestantes',
