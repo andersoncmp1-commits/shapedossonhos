@@ -66,7 +66,7 @@ export default function CoursesPage() {
       imageUrl: 'https://i.imgur.com/322VseA.png',
       imageHint: 'cup of tea',
       modulesCount: 9,
-      href: '#',
+      href: '/courses/chas-secretos',
     },
     {
       id: 'shots-matinais',
