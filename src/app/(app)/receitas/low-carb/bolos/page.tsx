@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Cake, Carrot, Chocolate, Apple, Citrus, Banana, Coconut, Strawberry } from 'lucide-react';
+import { ArrowLeft, Cake, Carrot, Apple, Citrus, Banana, Strawberry } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
@@ -36,7 +36,7 @@ const recipes = [
   },
   {
     title: "Bolo de Chocolate Low Carb",
-    icon: Chocolate,
+    icon: Cake,
     kcal: "150",
     timing: "40 Minutos",
     difficulty: "Fácil",
@@ -153,7 +153,7 @@ const recipes = [
   },
   {
     title: "Bolo de Coco Low Carb",
-    icon: Coconut,
+    icon: Cake,
     kcal: "260",
     timing: "50 Minutos",
     difficulty: "Fácil",
@@ -363,3 +363,5 @@ export default function BolosPage() {
     </div>
   );
 }
+
+    
