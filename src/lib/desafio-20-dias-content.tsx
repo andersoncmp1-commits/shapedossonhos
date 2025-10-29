@@ -620,6 +620,126 @@ const challengeContent: ChallengeDay[] = [
                 }
             },
         ]
+    },
+    {
+        day: 6,
+        meals: [
+            {
+                name: "Café da Manhã",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Cuscuz cozido com sal (4 colheres sopa 100g)\nOvo mexido (1 unidade)\nCreme de ricota light (1 colher sopa)\nCafé sem açúcar, pode ser com leite desnatado (1 xícara)`,
+                            kcal: "260",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Pão integral (1 fatia)\nCreme de ricota light (1 colher sopa)\nOvo mexido (1 unidade)\nCafé com leite desnatado (1 xícara)\nGoiaba fatiada (1 unidade)`,
+                            kcal: "253",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Pão francês sem miolo (1 unidade)\nQueijo mussarela (1 fatia)\nOvo mexido (1 unidade)\nCafé puro sem açúcar (1 xícara)\nMamão papaia em cubos (1 xícara)`,
+                            kcal: "344",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Lanche da Manhã",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Pote de iogurte natural (170g)`,
+                            kcal: "117",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Melancia em cubos (1 xícara)`,
+                            kcal: "46",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Pote de iogurte natural desnatado(160g)`,
+                            kcal: "50",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Almoço",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Arroz branco (3 colheres sopa 75g)\nFeijão cozido (1 concha rasa)\nPeito de frango grelhado (2 filés 80g)\nOvo de codorna cozido (3 unidades)\nAlface e tomate (à vontade)\nBrócolis cozido (4 Ramos)`,
+                            kcal: "330",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Escondidinho de frango\n(Receita no aplicativo)\nAlface e tomate fatiado (1/5 xícara)`,
+                            kcal: "250",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Arroz branco (3 colheres sopa 75g)\nPatinho moído (4 colheres sopa 80g)\nChuchu cru ralado (4 colheres sopa)\nCenoura cozida (3 colheres sopa)\nBrócolis cozido (4 talos)\nTomate fatiado (1 unidade)`,
+                            kcal: "246",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Lanche da Tarde",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Queijo branco (2 fatias pequenas 40g)\nCafé sem açúcar (1 xícara)\nFruta da sua ideia`,
+                            kcal: "94",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Iogurte natural desnatado (160g)\nFrutas em pedaços\nSementes de chia (1 colher sopa)`,
+                            kcal: "108",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Pão integral (1 fatia)\nCreme de ricota light (1 colher sopa)\nAlface (1 folha)\nMaçã fatiada (1 xícara)`,
+                            kcal: "111",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Jantar",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: `Escondidinho de abóbora com frango\n(Receita no aplicativo)\nMaçã fatiada (1 xícara)`,
+                            kcal: "255",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: `Rap 10 Low carb\n(Receita no aplicativo)`,
+                            kcal: "223",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: `Bolinho de frango e tapioca fit\n(Receita no aplicativo)`,
+                            kcal: "180",
+                        },
+                    ]
+                }
+            },
+        ]
     }
 ];
 
