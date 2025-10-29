@@ -13,7 +13,7 @@ export default function Desafio20DiasPage() {
     ...Array.from({ length: 20 }, (_, i) => ({
       id: `dia-${i + 1}`,
       title: `Dia ${i + 1}`,
-      href: '#',
+      href: `/planos-alimentares/desafio-20-dias/${i + 1}`,
     })),
   ];
 
