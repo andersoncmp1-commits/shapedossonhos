@@ -12,14 +12,14 @@ export default function ReceitasPage() {
     {
       id: 'receitas-veganas',
       title: 'Receitas Veganas',
-      imageUrl: 'https://picsum.photos/seed/veg1/1080/1920',
+      imageUrl: 'https://i.imgur.com/MH2je2A.png',
       imageHint: 'vegan food',
       href: '/receitas/veganas',
     },
     {
       id: 'receitas-low-carb',
       title: 'Receitas Low Carb',
-      imageUrl: 'https://picsum.photos/seed/lowcarb1/1080/1920',
+      imageUrl: 'https://i.imgur.com/RF0mg6a.png',
       imageHint: 'low carb meal',
       href: '/receitas/low-carb',
     },
