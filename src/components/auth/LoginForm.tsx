@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -67,7 +68,7 @@ export function LoginForm() {
     <div className="animate-fade-in">
       <div className="text-center mb-8">
         <Image 
-          src="https://i.imgur.com/kE9X1yS.png"
+          src="https://i.imgur.com/HQCad3q.png"
           alt="Shape dos Sonhos Logo"
           width={96}
           height={96}

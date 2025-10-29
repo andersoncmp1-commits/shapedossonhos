@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
@@ -11,7 +12,7 @@ export default function Home() {
           <div className="container px-4 md:px-6 text-center">
             <div className="max-w-3xl mx-auto space-y-4">
               <Image 
-                src="https://i.imgur.com/kE9X1yS.png"
+                src="https://i.imgur.com/HQCad3q.png"
                 alt="Shape dos Sonhos Logo"
                 width={128}
                 height={128}

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -34,7 +35,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center space-x-4 px-4 sm:justify-between sm:space-x-0">
         <Link href="/courses" className="flex items-center gap-3">
            <Image
-            src="https://i.imgur.com/kE9X1yS.png"
+            src="https://i.imgur.com/HQCad3q.png"
             alt="Shape dos Sonhos Logo"
             width={32}
             height={32}
