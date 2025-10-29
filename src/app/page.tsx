@@ -22,7 +22,7 @@ export default function Home() {
                 Shape dos Sonhos
               </h1>
               <p className="font-display text-lg text-muted-foreground md:text-xl">
-                Um espaço sagrado para o seu desenvolvimento e aprendizado.
+                Um ambiente para cuidar da sua alimentação, da sua rotina e de você.
               </p>
               <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
                 <Button asChild size="lg" className="font-display">
