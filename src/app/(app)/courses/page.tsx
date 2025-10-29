@@ -13,7 +13,7 @@ export default function CoursesPage() {
       imageUrl: 'https://picsum.photos/seed/start/1024/1024',
       imageHint: 'path beginning',
       modulesCount: 4,
-      href: '#', 
+      href: '/courses/comece-por-aqui', 
     },
     {
       id: 'planos-alimentares',
