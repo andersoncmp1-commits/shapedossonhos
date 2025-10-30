@@ -1,17 +1,16 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps, App, deleteApp } from 'firebase-admin/app';
+import { initializeApp, getApps, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
 
 // Função para garantir a inicialização singleton do Firebase Admin
 function initializeFirebaseAdmin() {
-  const
- 
-apps = getApps();
+  const apps = getApps();
   if (apps.length) {
-    return { app: apps[0], adminAuth: getAuth(apps[0]), adminDb: getFirestore(apps[0]) };
+    const app = apps[0];
+    return { app, adminAuth: getAuth(app), adminDb: getFirestore(app) };
   }
   const app = initializeApp({
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -51,9 +50,11 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error in /api/users:", error);
+    // Garante que qualquer erro de verificação de token retorne uma resposta JSON clara.
     if (error.code === 'auth/id-token-expired' || error.code === 'auth/argument-error' || error.code === 'auth/invalid-id-token') {
          return NextResponse.json({ error: 'Unauthorized: Invalid or expired token' }, { status: 401 });
     }
+    // Para todos os outros erros, retorna um erro de servidor interno.
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
