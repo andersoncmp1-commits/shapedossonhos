@@ -1,35 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps, App, ServiceAccount } from 'firebase-admin/app';
+import { initializeApp, getApps } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/hooks/useUsers";
 
-let adminApp: App;
-let adminAuth: ReturnType<typeof getAuth>;
-let adminDb: Firestore;
-
-// A estrutura da sua Service Account
-const serviceAccount: ServiceAccount = {
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  // Substitua `\n` por `\n` literalmente no valor da sua variável de ambiente
-  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-};
-
+// Simplifica a inicialização do Admin SDK.
+// Em ambientes do Google Cloud (como o App Hosting), as credenciais
+// são detectadas automaticamente.
 if (!getApps().length) {
-  adminApp = initializeApp({
-    credential: {
-        projectId: serviceAccount.projectId,
-        clientEmail: serviceAccount.clientEmail,
-        privateKey: serviceAccount.privateKey,
-    }
-  });
-} else {
-  adminApp = getApps()[0];
+  initializeApp();
 }
 
-adminAuth = getAuth(adminApp);
-adminDb = getFirestore(adminApp);
+const adminAuth = getAuth();
+const adminDb = getFirestore();
 
 export async function GET(req: NextRequest) {
   try {
