@@ -24,13 +24,6 @@ export default function PlanosAlimentaresPage() {
       href: '#',
     },
     {
-      id: 'dieta-do-ovo',
-      title: 'Dieta do Ovo para 5 Dias',
-      imageUrl: 'https://i.imgur.com/HzIAUQJ.png',
-      imageHint: 'eggs breakfast',
-      href: '#',
-    },
-    {
       id: 'planos-impressao',
       title: 'Planos para Impressão',
       imageUrl: 'https://i.imgur.com/kNZj7Rt.png',
