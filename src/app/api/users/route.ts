@@ -28,6 +28,17 @@ export async function GET(req: NextRequest) {
 
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken);
+    
+    // Concede acesso direto se for o superusuário
+    if (decodedToken.email === 'andersoncmp1@gmail.com') {
+        const usersSnapshot = await adminDb.collection('users').get();
+        const users: AppUser[] = usersSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        } as AppUser));
+        return NextResponse.json({ users });
+    }
+
     const userDocRef = adminDb.collection('users').doc(decodedToken.uid);
     const userDoc = await userDocRef.get();
 
@@ -49,7 +60,6 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error verifying token in /api/users:", error);
-    // Garante que toda falha na verificação de token retorne um JSON válido.
     return NextResponse.json({ 
         error: 'Unauthorized: Invalid or expired token', 
         details: error.message 
