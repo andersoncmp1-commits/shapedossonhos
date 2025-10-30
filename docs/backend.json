@@ -42,6 +42,29 @@
       "required": [
         "email"
       ]
+    },
+    "admin": {
+      "title": "Admin",
+      "description": "An administrator user with elevated privileges.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The admin's email address."
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "admin"
+          ],
+          "description": "The role of the user."
+        }
+      },
+      "required": [
+        "email",
+        "role"
+      ]
     }
   },
   "auth": {
@@ -55,6 +78,12 @@
         "$ref": "#/entities/user"
       },
       "description": "User documents, keyed by user ID."
+    },
+    "/admins/{userId}": {
+      "schema": {
+        "$ref": "#/entities/admin"
+      },
+      "description": "Admin user documents, used for role-based access control."
     }
   }
 }
