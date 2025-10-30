@@ -5,22 +5,17 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
 
-// Função para garantir a inicialização singleton do Firebase Admin
-function initializeFirebaseAdmin(): App {
-  const apps = getApps();
-  if (apps.length) {
-    return apps[0];
-  }
-  return initializeApp({
+// Garante a inicialização singleton do Firebase Admin
+if (!getApps().length) {
+  initializeApp({
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   });
 }
 
-export async function GET(req: NextRequest) {
-  const app = initializeFirebaseAdmin();
-  const adminAuth = getAuth(app);
-  const adminDb = getFirestore(app);
+const adminAuth = getAuth();
+const adminDb = getFirestore();
 
+export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
     return NextResponse.json({ error: 'Unauthorized: No token provided' }, { status: 401 });
