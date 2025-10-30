@@ -1,19 +1,10 @@
-import { AuthWrapper } from "@/components/auth/AuthWrapper";
-import { Header } from "@/components/layout/Header";
 
 export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <AuthWrapper>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-1 container mx-auto px-4 py-8 animate-fade-in">
-            {children}
-        </main>
-      </div>
-    </AuthWrapper>
-  );
+  // Este layout é agora um componente de servidor puro por padrão.
+  // A estrutura visual é aplicada dentro de ClientAppLayout ou diretamente nas páginas.
+  return <>{children}</>;
 }

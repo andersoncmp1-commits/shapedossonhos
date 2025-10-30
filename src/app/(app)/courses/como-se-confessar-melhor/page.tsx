@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { ClientAppLayout } from '../../ClientAppLayout';
 
 
 export default function FunctionalExercisesPage() {
@@ -126,26 +127,28 @@ export default function FunctionalExercisesPage() {
 
 
   return (
-    <div>
-      <div className="mb-8">
-        <Button asChild variant="ghost">
-          <Link href="/courses">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar para Cursos
-          </Link>
-        </Button>
-      </div>
+    <ClientAppLayout>
+        <div>
+        <div className="mb-8">
+            <Button asChild variant="ghost">
+            <Link href="/courses">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar para Cursos
+            </Link>
+            </Button>
+        </div>
 
-      <div className="mb-8">
-        <h1 className="font-headline text-3xl font-bold tracking-tight">Exercícios Funcionais</h1>
-        <p className="text-muted-foreground font-display mt-2">
-          Escolha um dos treinos abaixo para começar a se exercitar.
-        </p>
-      </div>
+        <div className="mb-8">
+            <h1 className="font-headline text-3xl font-bold tracking-tight">Exercícios Funcionais</h1>
+            <p className="text-muted-foreground font-display mt-2">
+            Escolha um dos treinos abaixo para começar a se exercitar.
+            </p>
+        </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {workouts.map(renderWorkoutCard)}
-      </div>
-    </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {workouts.map(renderWorkoutCard)}
+        </div>
+        </div>
+    </ClientAppLayout>
   );
 }

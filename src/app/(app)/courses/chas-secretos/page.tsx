@@ -1,9 +1,11 @@
 
+"use client";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Zap, Clock, Leaf, Flame, Wind, Coffee, Sprout } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { ClientAppLayout } from '../../ClientAppLayout';
 
 const teas = [
   {
@@ -268,60 +270,62 @@ const teas = [
 
 export default function ChasSecretosPage() {
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <Button asChild variant="ghost">
-          <Link href="/courses">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar para Cursos
-          </Link>
-        </Button>
-      </div>
+    <ClientAppLayout>
+        <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+            <Button asChild variant="ghost">
+            <Link href="/courses">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar para Cursos
+            </Link>
+            </Button>
+        </div>
 
-      <Card className="bg-card/80 backdrop-blur-lg">
-        <CardHeader>
-          <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">Chás Secretos para Secar</CardTitle>
-          <CardDescription className="font-display text-lg text-foreground/90">Descubra chás poderosos para acelerar seu metabolismo.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Accordion type="multiple" className="w-full space-y-4">
-            {teas.map((tea, index) => (
-              <AccordionItem value={`item-${index}`} key={index} className="bg-muted/30 rounded-lg px-4 border">
-                <AccordionTrigger className="font-headline text-xl hover:no-underline">
-                  <div className="flex items-center gap-4">
-                    <tea.icon className="h-6 w-6 text-primary" />
-                    {tea.title}
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pt-4">
-                  <div className="flex flex-col md:flex-row gap-8">
-                    <div className="flex-1">
-                      <h4 className="font-bold font-headline text-primary mb-3">Ingredientes</h4>
-                      <ul className="list-disc list-inside space-y-2 font-display text-foreground/80">
-                        {tea.ingredients.map((ing, i) => (
-                          <li key={i}>{ing}</li>
-                        ))}
-                      </ul>
+        <Card className="bg-card/80 backdrop-blur-lg">
+            <CardHeader>
+            <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">Chás Secretos para Secar</CardTitle>
+            <CardDescription className="font-display text-lg text-foreground/90">Descubra chás poderosos para acelerar seu metabolismo.</CardDescription>
+            </CardHeader>
+            <CardContent>
+            <Accordion type="multiple" className="w-full space-y-4">
+                {teas.map((tea, index) => (
+                <AccordionItem value={`item-${index}`} key={index} className="bg-muted/30 rounded-lg px-4 border">
+                    <AccordionTrigger className="font-headline text-xl hover:no-underline">
+                    <div className="flex items-center gap-4">
+                        <tea.icon className="h-6 w-6 text-primary" />
+                        {tea.title}
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold font-headline text-primary mb-3">Modo de Preparo</h4>
-                      <ol className="list-decimal list-inside space-y-2 font-display text-foreground/80">
-                        {tea.preparation.map((step, i) => (
-                          <li key={i}>{step}</li>
-                        ))}
-                      </ol>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4">
+                    <div className="flex flex-col md:flex-row gap-8">
+                        <div className="flex-1">
+                        <h4 className="font-bold font-headline text-primary mb-3">Ingredientes</h4>
+                        <ul className="list-disc list-inside space-y-2 font-display text-foreground/80">
+                            {tea.ingredients.map((ing, i) => (
+                            <li key={i}>{ing}</li>
+                            ))}
+                        </ul>
+                        </div>
+                        <div className="flex-1">
+                        <h4 className="font-bold font-headline text-primary mb-3">Modo de Preparo</h4>
+                        <ol className="list-decimal list-inside space-y-2 font-display text-foreground/80">
+                            {tea.preparation.map((step, i) => (
+                            <li key={i}>{step}</li>
+                            ))}
+                        </ol>
+                        </div>
                     </div>
-                  </div>
-                   <div className="flex justify-end gap-4 text-xs text-muted-foreground mt-4">
-                        <span><Clock className="inline mr-1 h-3 w-3" />{tea.timing}</span>
-                        <span><Zap className="inline mr-1 h-3 w-3" />{tea.difficulty}</span>
-                    </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </CardContent>
-      </Card>
-    </div>
+                    <div className="flex justify-end gap-4 text-xs text-muted-foreground mt-4">
+                            <span><Clock className="inline mr-1 h-3 w-3" />{tea.timing}</span>
+                            <span><Zap className="inline mr-1 h-3 w-3" />{tea.difficulty}</span>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+                ))}
+            </Accordion>
+            </CardContent>
+        </Card>
+        </div>
+    </ClientAppLayout>
   );
 }

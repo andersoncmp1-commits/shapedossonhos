@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { ClientAppLayout } from '../ClientAppLayout';
 
 export default function PlanosAlimentaresPage() {
   const plans = [
@@ -98,26 +99,28 @@ export default function PlanosAlimentaresPage() {
 
 
   return (
-    <div>
-      <div className="mb-8">
-        <Button asChild variant="ghost">
-          <Link href="/courses">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar para Cursos
-          </Link>
-        </Button>
-      </div>
+    <ClientAppLayout>
+        <div>
+        <div className="mb-8">
+            <Button asChild variant="ghost">
+            <Link href="/courses">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar para Cursos
+            </Link>
+            </Button>
+        </div>
 
-      <div className="mb-8">
-        <h1 className="font-headline text-3xl font-bold tracking-tight">Planos Alimentares</h1>
-        <p className="text-muted-foreground font-display mt-2">
-          Escolha um dos planos abaixo para começar.
-        </p>
-      </div>
+        <div className="mb-8">
+            <h1 className="font-headline text-3xl font-bold tracking-tight">Planos Alimentares</h1>
+            <p className="text-muted-foreground font-display mt-2">
+            Escolha um dos planos abaixo para começar.
+            </p>
+        </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {plans.map(renderPlanCard)}
-      </div>
-    </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {plans.map(renderPlanCard)}
+        </div>
+        </div>
+    </ClientAppLayout>
   );
 }

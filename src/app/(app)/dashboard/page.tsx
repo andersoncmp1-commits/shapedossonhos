@@ -15,8 +15,10 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { errorEmitter } from "@/lib/error-emitter";
 import { FirestorePermissionError } from "@/lib/errors";
+import { AuthWrapper } from "@/components/auth/AuthWrapper";
+import { ClientAppLayout } from "../ClientAppLayout";
 
-export default function CourseDetailPage() {
+function DashboardContent() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [completedModules, setCompletedModules] = useState<string[]>([]);
@@ -99,83 +101,95 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-        <div>
-            <div className="mb-8">
-              <Button asChild variant="ghost">
-                <Link href="/courses">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Voltar para Cursos
-                </Link>
-              </Button>
-            </div>
-            <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
-            <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
+        <ClientAppLayout>
+            <div>
+                <div className="mb-8">
+                <Button asChild variant="ghost">
+                    <Link href="/courses">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar para Cursos
+                    </Link>
+                </Button>
+                </div>
+                <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
+                <p className="text-muted-foreground font-display mb-8">Acompanhe seu progresso nos módulos abaixo.</p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className="rounded-lg bg-card">
-                        <Skeleton className="w-full aspect-[9/16] rounded-lg" />
-                    </div>
-                ))}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div key={i} className="rounded-lg bg-card">
+                            <Skeleton className="w-full aspect-[9/16] rounded-lg" />
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+        </ClientAppLayout>
     );
   }
 
   return (
-    <div>
-        <div className="mb-8">
-            <Button asChild variant="ghost">
-                <Link href="/courses">
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Voltar para Cursos
-                </Link>
-            </Button>
-        </div>
-        <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
-        <p className="text-muted-foreground font-display mb-8">Clique em um módulo para abrir o material de estudo.</p>
+    <ClientAppLayout>
+        <div>
+            <div className="mb-8">
+                <Button asChild variant="ghost">
+                    <Link href="/courses">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Voltar para Cursos
+                    </Link>
+                </Button>
+            </div>
+            <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">{courseTitle}</h1>
+            <p className="text-muted-foreground font-display mb-8">Clique em um módulo para abrir o material de estudo.</p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {modules.map(module => (
-                <ModuleCard 
-                    key={module.id} 
-                    module={module}
-                    isCompleted={completedModules.includes(module.id)}
-                    onOpen={handleOpenModule}
-                />
-            ))}
-        </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {modules.map(module => (
+                    <ModuleCard 
+                        key={module.id} 
+                        module={module}
+                        isCompleted={completedModules.includes(module.id)}
+                        onOpen={handleOpenModule}
+                    />
+                ))}
+            </div>
 
-        {selectedModule && (
-          <Dialog open={!!selectedModule} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
-            <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col p-0">
-                <DialogHeader className="p-6 pb-0">
-                    <DialogTitle>{selectedModule.title}</DialogTitle>
-                </DialogHeader>
-                <div className="flex-grow overflow-hidden px-6">
-                    <iframe 
-                        src={selectedModule.pdfUrl} 
-                        width="100%" 
-                        height="100%" 
-                        allow="autoplay"
-                        className="border-0"
-                    ></iframe>
-                </div>
-                <DialogFooter className="p-6 pt-4 border-t bg-background/80">
-                  <Button 
-                    variant={completedModules.includes(selectedModule.id) ? "secondary" : "default"}
-                    onClick={() => handleToggleComplete(selectedModule.id)}
-                  >
-                    <CheckCircle className="mr-2 h-4 w-4" />
-                    {completedModules.includes(selectedModule.id) ? "Desmarcar como concluído" : "Marcar como concluído"}
-                  </Button>
-                  <DialogClose asChild>
-                    <Button variant="outline">Fechar</Button>
-                  </DialogClose>
-                </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        )}
-    </div>
+            {selectedModule && (
+            <Dialog open={!!selectedModule} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+                <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col p-0">
+                    <DialogHeader className="p-6 pb-0">
+                        <DialogTitle>{selectedModule.title}</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex-grow overflow-hidden px-6">
+                        <iframe 
+                            src={selectedModule.pdfUrl} 
+                            width="100%" 
+                            height="100%" 
+                            allow="autoplay"
+                            className="border-0"
+                        ></iframe>
+                    </div>
+                    <DialogFooter className="p-6 pt-4 border-t bg-background/80">
+                    <Button 
+                        variant={completedModules.includes(selectedModule.id) ? "secondary" : "default"}
+                        onClick={() => handleToggleComplete(selectedModule.id)}
+                    >
+                        <CheckCircle className="mr-2 h-4 w-4" />
+                        {completedModules.includes(selectedModule.id) ? "Desmarcar como concluído" : "Marcar como concluído"}
+                    </Button>
+                    <DialogClose asChild>
+                        <Button variant="outline">Fechar</Button>
+                    </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            )}
+        </div>
+    </ClientAppLayout>
   );
+}
+
+export default function CourseDetailPage() {
+    return (
+        <AuthWrapper>
+            <DashboardContent />
+        </AuthWrapper>
+    )
 }

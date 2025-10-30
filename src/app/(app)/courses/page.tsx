@@ -12,8 +12,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { AuthWrapper } from '@/components/auth/AuthWrapper';
+import { ClientAppLayout } from '../ClientAppLayout';
 
-export default function CoursesPage() {
+function CoursesContent() {
   const courses = [
     {
       id: 'comece-por-aqui',
@@ -151,13 +153,23 @@ export default function CoursesPage() {
 
 
   return (
-    <div>
-      <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">Meus Cursos</h1>
-      <p className="text-muted-foreground font-display mb-8">Acesse os cursos que você adquiriu e comece a sua jornada.</p>
+    <ClientAppLayout>
+      <div>
+        <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">Meus Cursos</h1>
+        <p className="text-muted-foreground font-display mb-8">Acesse os cursos que você adquiriu e comece a sua jornada.</p>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {courses.map(renderCourseCard)}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {courses.map(renderCourseCard)}
+        </div>
       </div>
-    </div>
+    </ClientAppLayout>
   );
+}
+
+export default function CoursesPage() {
+    return (
+        <AuthWrapper>
+            <CoursesContent />
+        </AuthWrapper>
+    )
 }
