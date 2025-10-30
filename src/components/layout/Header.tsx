@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -30,10 +31,16 @@ export function Header() {
   useEffect(() => {
     const checkAdmin = async () => {
       if (user && db) {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists() && userDoc.data().role === 'admin') {
+        // UID do usuário andersoncmp1@gmail.com. 
+        // Em um sistema real, essa verificação seria mais robusta.
+        if (user.email === 'andersoncmp1@gmail.com') {
           setIsAdmin(true);
+          // Opcional: verificar o documento no Firestore para ter certeza.
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists() && userDoc.data().role === 'admin') {
+            setIsAdmin(true);
+          }
         } else {
           setIsAdmin(false);
         }
@@ -102,7 +109,7 @@ export function Header() {
                     <span>Admin</span>
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuSeparator className="sm:hidden"/>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Sair</span>
