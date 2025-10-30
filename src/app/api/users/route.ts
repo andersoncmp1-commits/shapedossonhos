@@ -1,12 +1,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps, App, deleteApp } from 'firebase-admin/app';
+import { initializeApp, getApps, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
 
 // Função para garantir a inicialização singleton do Firebase Admin
-function initializeFirebaseAdmin() {
+function initializeFirebaseAdmin(): App {
   const apps = getApps();
   if (apps.length) {
     return apps[0];
@@ -54,6 +54,10 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error verifying token in /api/users:", error);
-    return NextResponse.json({ error: 'Unauthorized: Invalid or expired token', details: error.message }, { status: 401 });
+    // Garante que toda falha na verificação de token retorne um JSON válido.
+    return NextResponse.json({ 
+        error: 'Unauthorized: Invalid or expired token', 
+        details: error.message 
+    }, { status: 401 });
   }
 }
