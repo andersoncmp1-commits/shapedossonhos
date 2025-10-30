@@ -43,7 +43,8 @@ export default function DayChallengePage({ params }: { params: { day: string } }
   const { db } = getFirebase();
   const { toast } = useToast();
   
-  const dayNumber = parseInt(params.day, 10);
+  const day = params.day;
+  const dayNumber = parseInt(day, 10);
   const dayData = getChallengeDay(dayNumber);
   const dayId = `desafio-dia-${dayNumber}`;
 
