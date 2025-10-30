@@ -1,10 +1,19 @@
 
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getChallengeDay } from '@/lib/desafio-20-dias-content';
+import { useAuth } from '@/hooks/useAuth';
+import { getFirebase } from '@/lib/firebase';
+import { doc, getDoc, setDoc, arrayUnion, arrayRemove, updateDoc } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
+import { FirestorePermissionError } from '@/lib/errors';
+import { errorEmitter } from '@/lib/error-emitter';
 
 function MealOption({ option }: { option: { title: string; description: string; kcal: string } }) {
   return (
@@ -30,8 +39,71 @@ function MealContent({ title, options }: { title: string, options: { title: stri
 }
 
 export default function DayChallengePage({ params }: { params: { day: string } }) {
+  const { user } = useAuth();
+  const { db } = getFirebase();
+  const { toast } = useToast();
+
   const dayNumber = parseInt(params.day, 10);
   const dayData = getChallengeDay(dayNumber);
+  const dayId = `desafio-dia-${dayNumber}`;
+
+  const [completedDays, setCompletedDays] = useState<string[]>([]);
+  const [loadingProgress, setLoadingProgress] = useState(true);
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      if (user && db) {
+        setLoadingProgress(true);
+        const userDocRef = doc(db, "users", user.uid);
+        try {
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            setCompletedDays(userDoc.data().completedChallengeDays || []);
+          } else {
+             await setDoc(userDocRef, { email: user.email, completedChallengeDays: [] }, { merge: true })
+              .catch(serverError => {
+                  const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'create',
+                    requestResourceData: { email: user.email, completedChallengeDays: [] },
+                  });
+                  errorEmitter.emit('permission-error', permissionError);
+              });
+          }
+        } catch (error) {
+          console.error("Error fetching user progress: ", error);
+        } finally {
+          setLoadingProgress(false);
+        }
+      }
+    };
+    fetchProgress();
+  }, [user, db]);
+
+  const handleToggleComplete = () => {
+    if (!user || !db) return;
+    const userDocRef = doc(db, "users", user.uid);
+    const isCompleted = completedDays.includes(dayId);
+
+    const updateData = { completedChallengeDays: isCompleted ? arrayRemove(dayId) : arrayUnion(dayId) };
+    
+    updateDoc(userDocRef, updateData).then(() => {
+      if (isCompleted) {
+        setCompletedDays(prev => prev.filter(id => id !== dayId));
+        toast({ title: `Dia ${dayNumber} desmarcado` });
+      } else {
+        setCompletedDays(prev => [...prev, dayId]);
+        toast({ title: `Dia ${dayNumber} concluído!`, description: "Você está indo muito bem!" });
+      }
+    }).catch(serverError => {
+        const permissionError = new FirestorePermissionError({
+          path: userDocRef.path,
+          operation: 'update',
+          requestResourceData: updateData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
+  };
 
   if (!dayData) {
     return (
@@ -58,9 +130,11 @@ export default function DayChallengePage({ params }: { params: { day: string } }
     );
   }
 
+  const isCurrentDayCompleted = completedDays.includes(dayId);
+
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
+      <div className="mb-8 flex justify-between items-center">
         <Button asChild variant="ghost">
           <Link href="/planos-alimentares/desafio-20-dias">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -71,9 +145,20 @@ export default function DayChallengePage({ params }: { params: { day: string } }
 
       <Card className="bg-card/80 backdrop-blur-lg">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">
-            Dia {params.day}
-          </CardTitle>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">
+              Dia {params.day}
+            </CardTitle>
+            <Button
+              variant={isCurrentDayCompleted ? "secondary" : "default"}
+              onClick={handleToggleComplete}
+              disabled={loadingProgress}
+              className="w-full sm:w-auto"
+            >
+              <CheckCircle className="mr-2 h-4 w-4" />
+              {isCurrentDayCompleted ? "Desmarcar como concluído" : "Marcar como concluído"}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <p className="font-display text-lg text-foreground/90 mb-6">

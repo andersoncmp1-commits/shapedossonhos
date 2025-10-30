@@ -23,13 +23,31 @@
           "items": {
             "type": "string"
           }
+        },
+        "completedWorkoutLessons": {
+          "type": "array",
+          "description": "List of completed workout lesson IDs.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "completedChallengeDays": {
+          "type": "array",
+          "description": "List of completed 20-day challenge day IDs.",
+          "items": {
+            "type": "string"
+          }
         }
       },
-      "required": ["email"]
+      "required": [
+        "email"
+      ]
     }
   },
   "auth": {
-    "providers": ["password"]
+    "providers": [
+      "password"
+    ]
   },
   "firestore": {
     "/users/{userId}": {
