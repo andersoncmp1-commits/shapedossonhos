@@ -34,7 +34,9 @@ export function useUsers() {
 
     setLoading(true);
     try {
-        const response = await fetch(`/api/users?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`/api/users?email=${encodeURIComponent(email)}`, {
+            credentials: 'include', // Envia os cookies de autenticação
+        });
         
         if (!response.ok) {
             const errorData = await response.json();
