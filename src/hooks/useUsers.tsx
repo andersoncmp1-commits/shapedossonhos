@@ -1,16 +1,18 @@
+
 "use client";
 
 import { useState, useCallback } from "react";
-import { collection, getDocs, query, where, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, getDocs, query, where, QueryDocumentSnapshot, DocumentData, doc, updateDoc } from "firebase/firestore";
 import { getFirebase } from "@/lib/firebase";
 import { useToast } from "./use-toast";
 import { FirestorePermissionError } from "@/lib/errors";
 import { errorEmitter } from "@/lib/error-emitter";
 import { useAdminAuth } from "./useAdminAuth";
 
-interface AppUser {
+export interface AppUser {
     id: string;
     email: string;
+    role?: 'admin' | 'user';
     completedModules?: string[];
     completedConfessionLessons?: string[];
     completedWorkoutLessons?: string[];
@@ -26,7 +28,6 @@ export function useUsers() {
 
   const searchUsers = useCallback(async (emailToSearch: string) => {
     if (adminLoading) {
-      // Aguarde a verificação do admin terminar
       return;
     }
 
@@ -38,9 +39,10 @@ export function useUsers() {
       
       try {
         const querySnapshot = await getDocs(q);
-        const usersList = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
+        const usersList: AppUser[] = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
           id: doc.id,
           email: doc.data().email,
+          role: doc.data().role || 'user',
           completedModules: doc.data().completedModules || [],
           completedConfessionLessons: doc.data().completedConfessionLessons || [],
           completedWorkoutLessons: doc.data().completedWorkoutLessons || [],
@@ -82,5 +84,35 @@ export function useUsers() {
     }
   }, [isAdmin, adminLoading, db, toast]);
 
-  return { users, loading, searchUsers };
+  const updateUser = useCallback(async (userId: string, data: Partial<AppUser>) => {
+    if (!isAdmin || !db) {
+        toast({
+            variant: "destructive",
+            title: "Acesso Negado",
+            description: "Você não tem permissão para realizar esta ação.",
+        });
+        return;
+    }
+
+    setLoading(true);
+    const userDocRef = doc(db, 'users', userId);
+    try {
+        await updateDoc(userDocRef, data);
+        toast({
+            title: "Usuário atualizado!",
+            description: "Os dados do usuário foram salvos com sucesso.",
+        });
+    } catch (error) {
+        const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'update',
+            requestResourceData: data,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    } finally {
+        setLoading(false);
+    }
+  }, [isAdmin, db, toast]);
+
+  return { users, loading, searchUsers, updateUser };
 }
