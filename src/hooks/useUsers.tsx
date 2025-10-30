@@ -1,10 +1,13 @@
+
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback }from "react";
 import { collection, getDocs, query, where, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { getFirebase } from "@/lib/firebase";
 import { useAuth } from "./useAuth";
 import { useToast } from "./use-toast";
+import { FirestorePermissionError } from "@/lib/errors";
+import { errorEmitter } from "@/lib/error-emitter";
 
 interface AppUser {
     id: string;
@@ -49,12 +52,11 @@ export function useUsers() {
           });
         }
       } catch (error: any) {
-          console.error("Error fetching users: ", error);
-          toast({
-              variant: "destructive",
-              title: "Erro ao buscar usuário",
-              description: "Não foi possível realizar a busca. Verifique as permissões ou tente novamente.",
+          const permissionError = new FirestorePermissionError({
+            path: usersColRef.path,
+            operation: 'list',
           });
+          errorEmitter.emit('permission-error', permissionError);
       } finally {
         setLoading(false);
       }
