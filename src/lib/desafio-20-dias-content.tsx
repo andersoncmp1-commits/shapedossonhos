@@ -860,6 +860,126 @@ const challengeContent: ChallengeDay[] = [
                 }
             },
         ]
+    },
+    {
+        day: 8,
+        meals: [
+            {
+                name: "Café da Manhã",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: "Ovos mexidos (1 unidade)\nPão integral (1 fatia)\nCafé puro (1 xícara)\nMamão (1 metade = 100g)",
+                            kcal: "216",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: "Pão francês (1 unidade)\nOvos mexidos (1 unidade)\nCafé puro (1 xícara)\nUvas roxas (1 xícara)",
+                            kcal: "254",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: "Cuscuz cozido (8 Colheres Sopa 100g)\nOvos mexidos (1 unidade)\nCafé puro (1 xícara)\nMamão (1 metade 100g)",
+                            kcal: "260",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Lanche da Manhã",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: "Manga em cubos (1 xícara)\nSementes de chia (1 colher sopa)",
+                            kcal: "165",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: "Panqueca de banana e aveia\n(Receita no aplicativo)",
+                            kcal: "121",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: "Mamão papaia (1 metade)\nFarelo de aveia (1 xícara)",
+                            kcal: "98",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Almoço",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: "Arroz branco (3 colheres sopa 75g)\nFeijão cozido (1 concha rasa 80g)\nPatinho grelhado (2 filés médios 80g)\nCenoura cozida (4 colheres sopa)\nRepolho refogado (3 colheres sopa)\nPepino em rodelas (10 fatias)\nAlface cortada (à vontade)",
+                            kcal: "312",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: "Arroz branco (4 colheres sopa)\nStrogonoff Fit (4 colheres sopa)\nCenoura cozida (3 colheres sopa)\nPurê de abóbora (2 colheres sopa)\nAlface e tomate (à vontade)",
+                            kcal: "281",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: "Arroz branco (3 colheres sopa 75g)\nFeijão preto (3 colheres sopa 70g)\nOvo frito na água (2 unidades)\nTomate fatiado (1 xícara)\nAlface cortada (1 xícara)\nCenoura crua ralada (1 xícara)",
+                            kcal: "334",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Lanche da Tarde",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: "Melão em cubos (1 xícara)\nBiscoitos de polvilho 5 unidades)",
+                            kcal: "69",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: "Banana prata (1 unidade)\nFarelo de aveia 1 colher sopa 10g)",
+                            kcal: "92",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: "Mamão (1 fatia ou 100g)\nFarelo de aveia (1 colher sopa 10g)",
+                            kcal: "80",
+                        },
+                    ]
+                }
+            },
+            {
+                name: "Jantar",
+                content: {
+                    title: "Escolha uma das opções abaixo!",
+                    options: [
+                        {
+                            title: "OPÇÃO 1",
+                            description: "Patinho moído (3 colheres sopa)\nPurê de batata (4 colheres sopa)\nSalada de alface e tomate (1 xícara)\nCenoura ralada (3 colheres sopa)",
+                            kcal: "255",
+                        },
+                        {
+                            title: "OPÇÃO 2",
+                            description: "Omelete de legumes\n(Receita no aplicativo)\nFilé de peixe grelhado (1 filé ou 100g)\nSalada de alface fatiado (1 xícara)",
+                            kcal: "223",
+                        },
+                        {
+                            title: "OPÇÃO 3",
+                            description: "Mini pizza de cenoura e frango Low carb\n(Receita no aplicativo)\nSobremesa de manga\n(Receita no aplicativo)",
+                            kcal: "180",
+                        },
+                    ]
+                }
+            },
+        ]
     }
 ];
 
