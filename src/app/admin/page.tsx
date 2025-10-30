@@ -21,12 +21,14 @@ export default function AdminPage() {
   
   useEffect(() => {
     async function fetchUsers() {
-      if (!user) {
+      // Don't fetch if auth is still loading or if there's no user
+      if (authLoading || !user) {
         setLoading(false);
         setIsAdmin(false);
         return;
       }
 
+      setLoading(true);
       try {
         const idToken = await user.getIdToken();
         const response = await fetch('/api/users', {
@@ -37,17 +39,16 @@ export default function AdminPage() {
 
         if (response.ok) {
             const data = await response.json();
-            setIsAdmin(true);
             setUsers(data.users);
+            setIsAdmin(true);
         } else {
-            // Se a resposta não for OK, consideramos que não é admin ou houve um erro.
             setIsAdmin(false);
             console.error("Failed to fetch users. Status:", response.status);
-            try {
-              const errorData = await response.json();
-              console.error("Error payload:", errorData);
+             try {
+                const errorData = await response.json();
+                console.error("Error payload:", errorData);
             } catch {
-              console.error("Could not parse error response body.");
+                console.error("Could not parse error response body.");
             }
         }
       } catch (error) {
@@ -63,9 +64,7 @@ export default function AdminPage() {
       }
     }
 
-    if (!authLoading) {
-      fetchUsers();
-    }
+    fetchUsers();
   }, [user, authLoading, toast]);
 
 

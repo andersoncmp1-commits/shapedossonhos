@@ -23,8 +23,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      
       // Store the ID token in a cookie for server-side verification
       if (user) {
         try {
@@ -39,7 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Clear the cookie on logout
         document.cookie = 'firebaseIdToken=; path=/; max-age=0';
       }
-
+      
+      setUser(user);
       setLoading(false);
     });
 
@@ -48,6 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value = { user, loading };
 
+  // This loading state is important. It prevents child components from rendering
+  // before the auth state is determined and the cookie is set.
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
