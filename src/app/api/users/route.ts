@@ -1,17 +1,18 @@
+
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps, App, getApp } from 'firebase-admin/app';
-import { getAuth, Auth } from 'firebase-admin/auth';
-import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import { initializeApp, getApps, getApp, type App } from 'firebase-admin/app';
+import { getAuth, type Auth } from 'firebase-admin/auth';
+import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
 
 // Garante a inicialização singleton do Firebase Admin
-function initializeFirebaseAdmin(): { adminAuth: Auth, adminDb: Firestore } {
+function initializeFirebaseAdmin() {
   if (!getApps().length) {
     initializeApp({
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     });
   }
-  return { adminAuth: getAuth(), adminDb: getFirestore() };
+  return { adminApp: getApp(), adminAuth: getAuth(), adminDb: getFirestore() };
 }
 
 export async function GET(req: NextRequest) {
