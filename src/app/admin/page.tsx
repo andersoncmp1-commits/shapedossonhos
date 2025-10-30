@@ -1,61 +1,88 @@
+"use client";
 
-import { cookies } from 'next/headers';
-import { initializeApp, getApps, App } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, Loader } from "lucide-react";
 import type { AppUser } from "@/hooks/useUsers";
 import { AdminUserEditor } from './AdminUserEditor';
 import { Header } from '@/components/layout/Header';
+import { useToast } from '@/hooks/use-toast';
 
-// --- INICIALIZAÇÃO DO FIREBASE ADMIN ---
-let adminApp: App;
-let adminAuth: ReturnType<typeof getAuth>;
-let adminDb: Firestore;
-
-if (!getApps().length) {
-  adminApp = initializeApp({
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  });
-} else {
-  adminApp = getApps()[0];
-}
-
-adminAuth = getAuth(adminApp);
-adminDb = getFirestore(adminApp);
-
-
-export default async function AdminPage() {
-  const cookieStore = cookies();
-  const idToken = cookieStore.get('firebaseIdToken')?.value;
-  let users: AppUser[] = [];
-  let isAdmin = false;
-
-  if (idToken) {
-    try {
-      const decodedToken = await adminAuth.verifyIdToken(idToken);
-      const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
-
-      if (userDoc.exists && userDoc.data()?.role === 'admin') {
-        isAdmin = true;
-        const usersSnapshot = await adminDb.collection('users').get();
-        users = usersSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-        } as AppUser));
+export default function AdminPage() {
+  const { user, loading: authLoading } = useAuth();
+  const { toast } = useToast();
+  const [users, setUsers] = useState<AppUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  useEffect(() => {
+    async function fetchUsers() {
+      if (!user) {
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error verifying admin token or fetching users:", error);
-      isAdmin = false;
-      users = [];
-    }
-  }
 
-  const content = isAdmin ? (
-      <Card>
+      try {
+        const idToken = await user.getIdToken();
+        const response = await fetch('/api/users', {
+          headers: {
+            'Authorization': `Bearer ${idToken}`,
+          },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            setIsAdmin(true);
+            setUsers(data.users);
+        } else {
+            const errorData = await response.json();
+            setIsAdmin(false);
+            console.error("Failed to fetch users:", errorData);
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        toast({
+          variant: "destructive",
+          title: "Erro ao buscar usuários",
+          description: "Não foi possível carregar a lista de usuários.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (!authLoading) {
+      fetchUsers();
+    }
+  }, [user, authLoading, toast]);
+
+
+  const content = () => {
+    if (authLoading || loading) {
+        return (
+            <div className="flex items-center justify-center h-24">
+                <Loader className="h-8 w-8 animate-spin" />
+            </div>
+        );
+    }
+    
+    if (!isAdmin) {
+       return (
+        <Alert variant="destructive">
+            <ShieldAlert className="h-4 w-4" />
+            <AlertTitle>Acesso Negado</AlertTitle>
+            <AlertDescription>
+                Você não tem permissão para visualizar esta página. Se você acredita que isso é um erro, por favor, entre em contato com o suporte.
+            </AlertDescription>
+        </Alert>
+       )
+    }
+
+    return (
+        <Card>
         <CardHeader>
           <CardTitle>Usuários</CardTitle>
         </CardHeader>
@@ -92,15 +119,8 @@ export default async function AdminPage() {
             </Table>
         </CardContent>
       </Card>
-  ) : (
-      <Alert variant="destructive">
-        <ShieldAlert className="h-4 w-4" />
-        <AlertTitle>Acesso Negado</AlertTitle>
-        <AlertDescription>
-            Você não tem permissão para visualizar esta página. Se você acredita que isso é um erro, por favor, entre em contato com o suporte.
-        </AlertDescription>
-    </Alert>
-  );
+    );
+  }
   
   return (
     <div className="flex flex-col min-h-screen">
@@ -108,7 +128,7 @@ export default async function AdminPage() {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
-          {content}
+          {content()}
         </div>
       </main>
     </div>
