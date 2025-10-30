@@ -1,8 +1,8 @@
 {
   "entities": {
-    "user": {
-      "title": "User",
-      "description": "A user of the application",
+    "userProfile": {
+      "title": "User Profile",
+      "description": "A user's public profile information.",
       "type": "object",
       "properties": {
         "email": {
@@ -75,11 +75,11 @@
   "firestore": {
     "/users/{userId}": {
       "schema": {
-        "$ref": "#/entities/user"
+        "$ref": "#/entities/userProfile"
       },
       "description": "User documents, keyed by user ID."
     },
-    "/admins/{userId}": {
+    "/admins/{adminId}": {
       "schema": {
         "$ref": "#/entities/admin"
       },
