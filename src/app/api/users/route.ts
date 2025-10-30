@@ -53,10 +53,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ users });
 
   } catch (error: any) {
-    console.error("Error in /api/users:", error);
-    if (error.code === 'auth/id-token-expired' || error.code === 'auth/argument-error' || error.code === 'auth/invalid-id-token') {
-         return NextResponse.json({ error: 'Unauthorized: Invalid or expired token' }, { status: 401 });
-    }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error("Error verifying token in /api/users:", error);
+    // Garante que qualquer erro na verificação do token retorne uma resposta JSON válida.
+    return NextResponse.json({ error: 'Unauthorized: Invalid or expired token' }, { status: 401 });
   }
 }
