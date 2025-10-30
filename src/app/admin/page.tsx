@@ -23,6 +23,7 @@ export default function AdminPage() {
     async function fetchUsers() {
       if (!user) {
         setLoading(false);
+        setIsAdmin(false);
         return;
       }
 
@@ -39,11 +40,18 @@ export default function AdminPage() {
             setIsAdmin(true);
             setUsers(data.users);
         } else {
-            const errorData = await response.json();
+            // Se a resposta não for OK, consideramos que não é admin ou houve um erro.
             setIsAdmin(false);
-            console.error("Failed to fetch users:", errorData);
+            console.error("Failed to fetch users. Status:", response.status);
+            try {
+              const errorData = await response.json();
+              console.error("Error payload:", errorData);
+            } catch {
+              console.error("Could not parse error response body.");
+            }
         }
       } catch (error) {
+        setIsAdmin(false);
         console.error("Error fetching users:", error);
         toast({
           variant: "destructive",
