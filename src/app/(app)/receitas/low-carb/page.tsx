@@ -33,21 +33,21 @@ export default function ReceitasLowCarbPage() {
     {
       id: 'salgados',
       title: 'Salgados',
-      imageUrl: 'https://i.imgur.com/J8hE6jW.png',
+      imageUrl: 'https://imgur.com/8ZZbi84.png',
       imageHint: 'low carb snacks',
       href: '/receitas/low-carb/salgados',
     },
     {
         id: 'paes',
         title: 'Pães',
-        imageUrl: 'https://i.imgur.com/Q2y1j1k.png',
+        imageUrl: 'https://imgur.com/pRajiJn.png',
         imageHint: 'low carb bread',
         href: '/receitas/low-carb/paes',
     },
     {
         id: 'sopas',
         title: 'Sopas',
-        imageUrl: 'https://i.imgur.com/6cE2b3c.png',
+        imageUrl: 'https://imgur.com/3iCtFs3.png',
         imageHint: 'low carb soup',
         href: '/receitas/low-carb/sopas',
     }
