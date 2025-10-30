@@ -66,7 +66,7 @@ export default function FunctionalExercisesPage() {
       id: 'treino-com-danca',
       title: 'Treino com Dança',
       description: 'Liberado em 2 dias',
-      imageUrl: 'https://i.imgur.com/Z5z4Jj5.png',
+      imageUrl: 'https://i.imgur.com/AEktoBL.png',
       imageHint: 'dance workout',
       href: '#',
       isLocked: true,
