@@ -47,11 +47,6 @@ export function useUsers() {
                   operation: 'list',
                 });
                 errorEmitter.emit('permission-error', permissionError);
-                 toast({
-                    variant: "destructive",
-                    title: "Erro de Permissão",
-                    description: "Você não tem permissão para listar os usuários. Verifique as regras de segurança do Firestore.",
-                });
             } else {
                  console.error("Error fetching users: ", error);
                 toast({
