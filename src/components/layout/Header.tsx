@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User as UserIcon, BookMarked } from "lucide-react";
+import { LogOut, User as UserIcon, BookMarked, Shield } from "lucide-react";
 
 export function Header() {
   const { user } = useAuth();
@@ -29,6 +29,8 @@ export function Header() {
     await signOut(auth);
     router.push("/login");
   };
+  
+  const isAdmin = user?.email === 'andersoncmp1@gmail.com';
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-lg">
@@ -76,6 +78,12 @@ export function Header() {
                     <BookMarked className="mr-2 h-4 w-4" />
                     <span>Meus Cursos</span>
                 </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem onClick={() => router.push('/admin')} className="cursor-pointer">
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Admin</span>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator className="sm:hidden"/>
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
