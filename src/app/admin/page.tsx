@@ -27,39 +27,32 @@ if (!getApps().length) {
 adminAuth = getAuth(adminApp);
 adminDb = getFirestore(adminApp);
 
-async function verifyAdminAndFetchUsers(): Promise<{ isAdmin: boolean; users: AppUser[] }> {
-    const cookieStore = cookies();
-    const idToken = cookieStore.get('firebaseIdToken')?.value;
-
-    if (!idToken) {
-        return { isAdmin: false, users: [] };
-    }
-
-    try {
-        const decodedToken = await adminAuth.verifyIdToken(idToken);
-        const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
-
-        if (userDoc.exists && userDoc.data()?.role === 'admin') {
-            // Se for admin, buscar todos os usuários
-            const usersSnapshot = await adminDb.collection('users').get();
-            const users = usersSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            } as AppUser));
-            return { isAdmin: true, users };
-        }
-        
-        return { isAdmin: false, users: [] };
-
-    } catch (error) {
-        console.error("Error verifying admin token or fetching users:", error);
-        return { isAdmin: false, users: [] };
-    }
-}
-
 
 export default async function AdminPage() {
-  const { isAdmin, users } = await verifyAdminAndFetchUsers();
+  const cookieStore = cookies();
+  const idToken = cookieStore.get('firebaseIdToken')?.value;
+  let users: AppUser[] = [];
+  let isAdmin = false;
+
+  if (idToken) {
+    try {
+      const decodedToken = await adminAuth.verifyIdToken(idToken);
+      const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
+
+      if (userDoc.exists && userDoc.data()?.role === 'admin') {
+        isAdmin = true;
+        const usersSnapshot = await adminDb.collection('users').get();
+        users = usersSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        } as AppUser));
+      }
+    } catch (error) {
+      console.error("Error verifying admin token or fetching users:", error);
+      isAdmin = false;
+      users = [];
+    }
+  }
 
   const content = isAdmin ? (
       <Card>
