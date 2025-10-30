@@ -12,10 +12,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { AuthWrapper } from '@/components/auth/AuthWrapper';
 import { Header } from '@/components/layout/Header';
 
-function CoursesContent() {
+export default function CoursesPage() {
   const courses = [
     {
       id: 'comece-por-aqui',
@@ -83,7 +82,7 @@ function CoursesContent() {
     {
       id: 'shots-matinais',
       title: 'Shots Matinais',
-      description: 'Comece o dia com shots matinais que dão um boost na sua imunidade e energia.',
+      description: 'Comece o dia com um boost na sua imunidade e energia.',
       imageUrl: 'https://i.imgur.com/2OEIa3L.png',
       imageHint: 'health shot',
       href: '/courses/shots-matinais',
@@ -169,10 +168,3 @@ function CoursesContent() {
   );
 }
 
-export default function CoursesPage() {
-    return (
-        <AuthWrapper>
-            <CoursesContent />
-        </AuthWrapper>
-    )
-}

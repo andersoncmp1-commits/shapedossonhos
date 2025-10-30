@@ -15,10 +15,9 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { errorEmitter } from "@/lib/error-emitter";
 import { FirestorePermissionError } from "@/lib/errors";
-import { AuthWrapper } from "@/components/auth/AuthWrapper";
 import { Header } from "@/components/layout/Header";
 
-function DashboardContent() {
+export default function CourseDetailPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [completedModules, setCompletedModules] = useState<string[]>([]);
@@ -192,10 +191,3 @@ function DashboardContent() {
   );
 }
 
-export default function CourseDetailPage() {
-    return (
-        <AuthWrapper>
-            <DashboardContent />
-        </AuthWrapper>
-    )
-}
