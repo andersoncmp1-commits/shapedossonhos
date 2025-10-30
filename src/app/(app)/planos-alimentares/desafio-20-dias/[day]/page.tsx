@@ -120,7 +120,7 @@ export default function DayChallengePage({ params }: { params: { day: string } }
         <Card className="bg-card/80 backdrop-blur-lg">
           <CardHeader>
             <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">
-              Dia {params.day}
+              Dia {day}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -148,7 +148,7 @@ export default function DayChallengePage({ params }: { params: { day: string } }
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">
-              Dia {params.day}
+              Dia {day}
             </CardTitle>
             <Button
               variant={isCurrentDayCompleted ? "secondary" : "default"}
