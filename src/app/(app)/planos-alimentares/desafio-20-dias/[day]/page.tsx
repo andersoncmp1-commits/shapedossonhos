@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
@@ -38,12 +39,13 @@ function MealContent({ title, options }: { title: string, options: { title: stri
     );
 }
 
-export default function DayChallengePage({ params }: { params: { day: string } }) {
+export default function DayChallengePage() {
   const { user } = useAuth();
   const { db } = getFirebase();
   const { toast } = useToast();
+  const params = useParams();
   
-  const day = params.day;
+  const day = params.day as string;
   const dayNumber = parseInt(day, 10);
   const dayData = getChallengeDay(dayNumber);
   const dayId = `desafio-dia-${dayNumber}`;
