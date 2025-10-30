@@ -12,7 +12,7 @@ import { getFirebase } from '@/lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { FirestorePermissionError } from '@/lib/errors';
 import { errorEmitter } from '@/lib/error-emitter';
-import { ClientAppLayout } from '../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 export default function Desafio20DiasPage() {
   const { user } = useAuth();
@@ -60,7 +60,9 @@ export default function Desafio20DiasPage() {
   ];
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -113,6 +115,7 @@ export default function Desafio20DiasPage() {
             </CardContent>
         </Card>
         </div>
-    </ClientAppLayout>
+        </main>
+    </div>
   );
 }

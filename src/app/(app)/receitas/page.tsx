@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ClientAppLayout } from '../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 export default function ReceitasPage() {
   const plans = [
@@ -27,7 +27,9 @@ export default function ReceitasPage() {
   ];
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div>
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -63,6 +65,7 @@ export default function ReceitasPage() {
             ))}
         </div>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }

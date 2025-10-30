@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { AuthWrapper } from '@/components/auth/AuthWrapper';
-import { ClientAppLayout } from '../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 function CoursesContent() {
   const courses = [
@@ -153,16 +153,19 @@ function CoursesContent() {
 
 
   return (
-    <ClientAppLayout>
-      <div>
-        <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">Meus Cursos</h1>
-        <p className="text-muted-foreground font-display mb-8">Acesse os cursos que você adquiriu e comece a sua jornada.</p>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <div>
+          <h1 className="font-headline text-3xl font-bold tracking-tight mb-2">Meus Cursos</h1>
+          <p className="text-muted-foreground font-display mb-8">Acesse os cursos que você adquiriu e comece a sua jornada.</p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {courses.map(renderCourseCard)}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {courses.map(renderCourseCard)}
+          </div>
         </div>
-      </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }
 

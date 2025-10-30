@@ -1,3 +1,4 @@
+
 import { cookies } from 'next/headers';
 import { initializeApp, getApps, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';

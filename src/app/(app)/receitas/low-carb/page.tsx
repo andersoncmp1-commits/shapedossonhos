@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ClientAppLayout } from '../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 export default function ReceitasLowCarbPage() {
   const categories = [
@@ -55,7 +55,9 @@ export default function ReceitasLowCarbPage() {
   ];
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
         <div>
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -91,6 +93,7 @@ export default function ReceitasLowCarbPage() {
             ))}
         </div>
         </div>
-    </ClientAppLayout>
+        </main>
+    </div>
   );
 }

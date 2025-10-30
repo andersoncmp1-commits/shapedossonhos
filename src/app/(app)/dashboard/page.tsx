@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { errorEmitter } from "@/lib/error-emitter";
 import { FirestorePermissionError } from "@/lib/errors";
 import { AuthWrapper } from "@/components/auth/AuthWrapper";
-import { ClientAppLayout } from "../ClientAppLayout";
+import { Header } from "@/components/layout/Header";
 
 function DashboardContent() {
   const { user } = useAuth();
@@ -101,7 +101,9 @@ function DashboardContent() {
 
   if (loading) {
     return (
-        <ClientAppLayout>
+        <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1 container mx-auto px-4 py-8">
             <div>
                 <div className="mb-8">
                 <Button asChild variant="ghost">
@@ -122,12 +124,15 @@ function DashboardContent() {
                     ))}
                 </div>
             </div>
-        </ClientAppLayout>
+            </main>
+        </div>
     );
   }
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
         <div>
             <div className="mb-8">
                 <Button asChild variant="ghost">
@@ -182,7 +187,8 @@ function DashboardContent() {
             </Dialog>
             )}
         </div>
-    </ClientAppLayout>
+        </main>
+    </div>
   );
 }
 

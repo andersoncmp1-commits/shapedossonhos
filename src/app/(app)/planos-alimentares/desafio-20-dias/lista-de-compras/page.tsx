@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ClientAppLayout } from '../../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 const categories = [
     {
@@ -36,7 +36,9 @@ const categories = [
 
 export default function ListaDeComprasPage() {
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -72,6 +74,7 @@ export default function ListaDeComprasPage() {
             </CardContent>
         </Card>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }

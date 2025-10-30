@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Zap, Clock, Leaf, Flame, Wind, Coffee, Sprout } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ClientAppLayout } from '../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 const teas = [
   {
@@ -270,7 +270,9 @@ const teas = [
 
 export default function ChasSecretosPage() {
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -326,6 +328,7 @@ export default function ChasSecretosPage() {
             </CardContent>
         </Card>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }

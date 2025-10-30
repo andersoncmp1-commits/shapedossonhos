@@ -15,7 +15,7 @@ import { doc, getDoc, setDoc, arrayUnion, arrayRemove, updateDoc } from 'firebas
 import { useToast } from '@/hooks/use-toast';
 import { FirestorePermissionError } from '@/lib/errors';
 import { errorEmitter } from '@/lib/error-emitter';
-import { ClientAppLayout } from '../../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 export default function TreinoParaGestantesPage() {
   const { user } = useAuth();
@@ -84,7 +84,9 @@ export default function TreinoParaGestantesPage() {
   const isCurrentLessonCompleted = completedLessons.includes(selectedLesson.id);
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto">
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -175,6 +177,7 @@ export default function TreinoParaGestantesPage() {
             </div>
         </div>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }

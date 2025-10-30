@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { ClientAppLayout } from '../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 export default function PlanosAlimentaresPage() {
   const plans = [
@@ -99,7 +99,9 @@ export default function PlanosAlimentaresPage() {
 
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div>
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -121,6 +123,7 @@ export default function PlanosAlimentaresPage() {
             {plans.map(renderPlanCard)}
         </div>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }

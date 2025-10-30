@@ -15,7 +15,7 @@ import { doc, getDoc, setDoc, arrayUnion, arrayRemove, updateDoc } from 'firebas
 import { useToast } from '@/hooks/use-toast';
 import { FirestorePermissionError } from '@/lib/errors';
 import { errorEmitter } from '@/lib/error-emitter';
-import { ClientAppLayout } from '../../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 function MealOption({ option }: { option: { title: string; description: string; kcal: string } }) {
   return (
@@ -111,35 +111,40 @@ export default function DayChallengePage() {
 
   if (!dayData) {
     return (
-      <ClientAppLayout>
-        <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
-            <Button asChild variant="ghost">
-                <Link href="/planos-alimentares/desafio-20-dias">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Voltar para o Desafio
-                </Link>
-            </Button>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="mb-8">
+                <Button asChild variant="ghost">
+                    <Link href="/planos-alimentares/desafio-20-dias">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar para o Desafio
+                    </Link>
+                </Button>
+                </div>
+                <Card className="bg-card/80 backdrop-blur-lg">
+                <CardHeader>
+                    <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">
+                    Dia {day}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p>Conteúdo para este dia ainda não disponível.</p>
+                </CardContent>
+                </Card>
             </div>
-            <Card className="bg-card/80 backdrop-blur-lg">
-            <CardHeader>
-                <CardTitle className="font-headline text-3xl font-bold tracking-tight text-primary">
-                Dia {day}
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p>Conteúdo para este dia ainda não disponível.</p>
-            </CardContent>
-            </Card>
-        </div>
-      </ClientAppLayout>
+        </main>
+      </div>
     );
   }
 
   const isCurrentDayCompleted = completedDays.includes(dayId);
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
         <div className="mb-8 flex justify-between items-center">
             <Button asChild variant="ghost">
@@ -188,6 +193,7 @@ export default function DayChallengePage() {
             </CardContent>
         </Card>
         </div>
-    </ClientAppLayout>
+        </main>
+    </div>
   );
 }

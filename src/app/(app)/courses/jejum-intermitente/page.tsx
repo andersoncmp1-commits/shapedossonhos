@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { ClientAppLayout } from '../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 export default function JejumIntermitentePage() {
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto flex flex-col h-[85vh]">
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -35,6 +37,7 @@ export default function JejumIntermitentePage() {
             ></iframe>
         </div>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }

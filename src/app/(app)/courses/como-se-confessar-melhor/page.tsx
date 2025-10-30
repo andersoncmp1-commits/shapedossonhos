@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { ClientAppLayout } from '../../ClientAppLayout';
+import { Header } from '@/components/layout/Header';
 
 
 export default function FunctionalExercisesPage() {
@@ -127,7 +127,9 @@ export default function FunctionalExercisesPage() {
 
 
   return (
-    <ClientAppLayout>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div>
         <div className="mb-8">
             <Button asChild variant="ghost">
@@ -149,6 +151,7 @@ export default function FunctionalExercisesPage() {
             {workouts.map(renderWorkoutCard)}
         </div>
         </div>
-    </ClientAppLayout>
+      </main>
+    </div>
   );
 }
