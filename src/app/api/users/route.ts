@@ -36,7 +36,11 @@ export async function GET(req: NextRequest) {
     const userDocRef = adminDb.collection('users').doc(decodedToken.uid);
     const userDoc = await userDocRef.get();
 
-    if (!userDoc.exists || userDoc.data()?.role !== 'admin') {
+    if (!userDoc.exists) {
+        return NextResponse.json({ error: 'Forbidden: User document not found.' }, { status: 403 });
+    }
+
+    if (userDoc.data()?.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden: User is not an admin' }, { status: 403 });
     }
 
@@ -50,11 +54,9 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error in /api/users:", error);
-    // Garante que qualquer erro de verificação de token retorne uma resposta JSON clara.
     if (error.code === 'auth/id-token-expired' || error.code === 'auth/argument-error' || error.code === 'auth/invalid-id-token') {
          return NextResponse.json({ error: 'Unauthorized: Invalid or expired token' }, { status: 401 });
     }
-    // Para todos os outros erros, retorna um erro de servidor interno.
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
