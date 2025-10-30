@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps, App } from 'firebase-admin/app';
+import { initializeApp, getApps, App, deleteApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
@@ -9,17 +9,17 @@ import type { AppUser } from "@/lib/types";
 function initializeFirebaseAdmin() {
   const apps = getApps();
   if (apps.length) {
-    const app = apps[0];
-    return { app, adminAuth: getAuth(app), adminDb: getFirestore(app) };
+    return apps[0];
   }
-  const app = initializeApp({
+  return initializeApp({
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   });
-  return { app, adminAuth: getAuth(app), adminDb: getFirestore(app) };
 }
 
 export async function GET(req: NextRequest) {
-  const { adminAuth, adminDb } = initializeFirebaseAdmin();
+  const app = initializeFirebaseAdmin();
+  const adminAuth = getAuth(app);
+  const adminDb = getFirestore(app);
 
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
@@ -54,7 +54,6 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error verifying token in /api/users:", error);
-    // Garante que qualquer erro na verificação do token retorne uma resposta JSON válida.
-    return NextResponse.json({ error: 'Unauthorized: Invalid or expired token' }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized: Invalid or expired token', details: error.message }, { status: 401 });
   }
 }
