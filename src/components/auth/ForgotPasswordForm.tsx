@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -43,17 +44,15 @@ export function ForgotPasswordForm() {
     try {
       await sendPasswordResetEmail(auth, values.email);
       toast({
-        title: "Email enviado!",
-        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+        title: "Link enviado!",
+        description: "Verifique sua caixa de entrada para as instruções.",
       });
       setIsSent(true);
     } catch (error: any) {
       console.error("Erro ao enviar email:", error);
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Não foi possível enviar o email de redefinição. Verifique o email digitado.",
-      });
+      // Por segurança, não informamos ao usuário se o e-mail não existe.
+      // A mensagem de sucesso é exibida de qualquer maneira.
+      setIsSent(true);
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +66,7 @@ export function ForgotPasswordForm() {
       </div>
       {isSent ? (
         <div className="text-center">
-            <p className="text-foreground">Se um usuário com este e-mail existir, um link de redefinição de senha foi enviado.</p>
+            <p className="text-foreground">Se o e-mail digitado estiver em nosso sistema, um link para redefinição de senha foi enviado. Verifique sua caixa de entrada e também a pasta de spam.</p>
              <Button asChild className="mt-6 font-display">
                 <Link href="/login">Voltar para o Login</Link>
              </Button>
