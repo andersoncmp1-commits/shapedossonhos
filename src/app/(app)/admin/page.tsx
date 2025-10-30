@@ -18,7 +18,7 @@ import { ShieldAlert } from "lucide-react";
 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useAdminAuth();
-  const { users, loading: usersLoading, updateUser, searchUsers } = useUsers();
+  const { users, loading: usersLoading, updateUser, searchUsers, refetchUsers } = useUsers();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
   const [editedUser, setEditedUser] = useState<Partial<AppUser>>({});
@@ -35,6 +35,10 @@ export default function AdminPage() {
       await updateUser(selectedUser.id, editedUser);
       setIsEditDialogOpen(false);
       setSelectedUser(null);
+      // After updating, re-run the search to get the fresh data
+      if (searchEmail) {
+        searchUsers(searchEmail);
+      }
     }
   };
   
@@ -87,7 +91,7 @@ export default function AdminPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Usuários Cadastrados</CardTitle>
+          <CardTitle>Usuários</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -120,8 +124,8 @@ export default function AdminPage() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center h-24">
-                      Nenhum usuário encontrado.
+                    <TableCell colSpan={4} className="text-center h-24">
+                      Nenhum usuário encontrado. Realize uma busca por e-mail.
                     </TableCell>
                   </TableRow>
                 )}
@@ -147,6 +151,7 @@ export default function AdminPage() {
                   value={editedUser.email || ""}
                   onChange={(e) => setEditedUser(prev => ({...prev, email: e.target.value}))}
                   className="col-span-3"
+                  disabled
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">

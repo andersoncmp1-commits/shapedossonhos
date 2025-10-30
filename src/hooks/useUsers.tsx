@@ -19,56 +19,23 @@ export interface AppUser {
     completedChallengeDays?: string[];
 }
 
-export function useUsers(emailToSearch?: string) {
+export function useUsers() {
   const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { db } = getFirebase();
   const { toast } = useToast();
   const [users, setUsers] = useState<AppUser[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const fetchUsers = useCallback(async () => {
-    if (adminLoading || !isAdmin || !db) {
-      if (!adminLoading) setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    const usersColRef = collection(db, "users");
-    
-    try {
-      const querySnapshot = await getDocs(usersColRef);
-      const usersList: AppUser[] = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
-        id: doc.id,
-        email: doc.data().email,
-        role: doc.data().role || 'user',
-        completedModules: doc.data().completedModules || [],
-        completedConfessionLessons: doc.data().completedConfessionLessons || [],
-        completedWorkoutLessons: doc.data().completedWorkoutLessons || [],
-        completedChallengeDays: doc.data().completedChallengeDays || [],
-      }));
-      
-      setUsers(usersList);
-    } catch (error: any) {
-        const permissionError = new FirestorePermissionError({
-          path: usersColRef.path,
-          operation: 'list',
-        });
-        errorEmitter.emit('permission-error', permissionError);
-        setUsers([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [isAdmin, adminLoading, db]);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
-  
   const searchUsers = useCallback(async (email: string) => {
-    if (!isAdmin || !db) return;
+    if (adminLoading || !isAdmin || !db || !email) {
+        setUsers([]);
+        return;
+    }
+
     setLoading(true);
     const usersColRef = collection(db, "users");
     const q = query(usersColRef, where("email", "==", email));
+    
     try {
       const querySnapshot = await getDocs(q);
       const usersList: AppUser[] = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
@@ -80,25 +47,27 @@ export function useUsers(emailToSearch?: string) {
         completedWorkoutLessons: doc.data().completedWorkoutLessons || [],
         completedChallengeDays: doc.data().completedChallengeDays || [],
       }));
-      setUsers(usersList);
+      
       if (usersList.length === 0) {
         toast({
-          variant: "destructive",
-          title: "Usuário não encontrado",
-          description: `Nenhum usuário encontrado com o email: ${email}`,
+            variant: "destructive",
+            title: "Usuário não encontrado",
+            description: "Nenhum usuário corresponde ao e-mail fornecido.",
         });
       }
+      setUsers(usersList);
+
     } catch (error: any) {
         const permissionError = new FirestorePermissionError({
           path: usersColRef.path,
-          operation: 'list',
+          operation: 'list', // A 'where' query is a 'list' operation in terms of rules
         });
         errorEmitter.emit('permission-error', permissionError);
         setUsers([]);
     } finally {
       setLoading(false);
     }
-  }, [isAdmin, db, toast]);
+  }, [isAdmin, adminLoading, db, toast]);
 
   const updateUser = useCallback(async (userId: string, data: Partial<Omit<AppUser, 'id'>>) => {
     if (!isAdmin || !db) {
@@ -110,7 +79,6 @@ export function useUsers(emailToSearch?: string) {
         return;
     }
 
-    setLoading(true);
     const userDocRef = doc(db, 'users', userId);
     try {
         await updateDoc(userDocRef, data);
@@ -118,7 +86,6 @@ export function useUsers(emailToSearch?: string) {
             title: "Usuário atualizado!",
             description: "Os dados do usuário foram salvos com sucesso.",
         });
-        await fetchUsers(); // Refetch all users to show updated data
     } catch (error) {
         const permissionError = new FirestorePermissionError({
             path: userDocRef.path,
@@ -126,10 +93,12 @@ export function useUsers(emailToSearch?: string) {
             requestResourceData: data,
         });
         errorEmitter.emit('permission-error', permissionError);
-    } finally {
-        setLoading(false);
     }
-  }, [isAdmin, db, toast, fetchUsers]);
+  }, [isAdmin, db, toast]);
 
-  return { users, loading, updateUser, searchUsers, refetchUsers: fetchUsers };
+  const refetchUsers = useCallback((email: string) => {
+    searchUsers(email);
+  }, [searchUsers]);
+
+  return { users, loading, updateUser, searchUsers, refetchUsers };
 }
