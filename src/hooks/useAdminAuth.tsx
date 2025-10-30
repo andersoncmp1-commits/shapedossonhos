@@ -18,13 +18,14 @@ export function useAdminAuth() {
     const checkAdminStatus = async () => {
       if (!authLoading) {
         if (!user) {
-          // Se não houver usuário, ele não é admin. Não redirecione, deixe a página decidir.
+          // Se não houver usuário, ele não é admin. A página decidirá o que fazer.
           setIsAdmin(false);
           setLoading(false);
           return;
         }
 
         try {
+            // A verificação correta é ler o documento do usuário e checar o campo 'role'.
             const userDocRef = doc(db, "users", user.uid);
             const userDoc = await getDoc(userDocRef);
             
