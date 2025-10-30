@@ -1,12 +1,15 @@
 
 "use client";
-import { AuthProvider } from "@/context/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Loader } from "@/components/ui/loader";
 
-function AppContent({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -25,19 +28,4 @@ function AppContent({ children }: { children: React.ReactNode }) {
   }
 
   return <>{children}</>;
-}
-
-
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <AuthProvider>
-      <AppContent>
-        {children}
-      </AppContent>
-    </AuthProvider>
-  );
 }

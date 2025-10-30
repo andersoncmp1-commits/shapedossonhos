@@ -24,9 +24,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#deaa2c" />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
+        <AuthProvider>
           {children}
           <Toaster />
           <FirebaseErrorListener />
+        </AuthProvider>
       </body>
     </html>
   );
