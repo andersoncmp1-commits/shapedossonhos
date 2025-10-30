@@ -10,6 +10,11 @@
           "format": "email",
           "description": "The user's email address."
         },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "user"],
+          "description": "The user's role."
+        },
         "completedModules": {
           "type": "array",
           "description": "List of completed module IDs.",
@@ -42,29 +47,6 @@
       "required": [
         "email"
       ]
-    },
-    "admin": {
-      "title": "Admin",
-      "description": "An administrator user with elevated privileges.",
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "The admin's email address."
-        },
-        "role": {
-          "type": "string",
-          "enum": [
-            "admin"
-          ],
-          "description": "The role of the user."
-        }
-      },
-      "required": [
-        "email",
-        "role"
-      ]
     }
   },
   "auth": {
@@ -78,12 +60,6 @@
         "$ref": "#/entities/userProfile"
       },
       "description": "User documents, keyed by user ID."
-    },
-    "/admins/{adminId}": {
-      "schema": {
-        "$ref": "#/entities/admin"
-      },
-      "description": "Admin user documents, used for role-based access control. The adminId should correspond to the user's UID."
     }
   }
 }

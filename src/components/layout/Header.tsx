@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -7,6 +6,8 @@ import { signOut } from "firebase/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { getFirebase } from "@/lib/firebase";
 import Image from "next/image";
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,14 +24,31 @@ import { LogOut, User as UserIcon, BookMarked, Shield } from "lucide-react";
 export function Header() {
   const { user } = useAuth();
   const router = useRouter();
-  const { auth } = getFirebase();
+  const { auth, db } = getFirebase();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (user && db) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists() && userDoc.data().role === 'admin') {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+    };
+    checkAdmin();
+  }, [user, db]);
+
 
   const handleLogout = async () => {
     await signOut(auth);
     router.push("/login");
   };
-  
-  const isAdmin = user?.email === 'andersoncmp1@gmail.com';
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-lg">

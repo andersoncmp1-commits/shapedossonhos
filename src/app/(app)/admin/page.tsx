@@ -77,7 +77,7 @@ export default function AdminPage() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center h-24">
-                      Digite um email para buscar um usuário.
+                      Nenhum usuário encontrado ou busca não realizada.
                     </TableCell>
                   </TableRow>
                 )}

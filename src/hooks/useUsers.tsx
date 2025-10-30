@@ -1,13 +1,12 @@
-
 "use client";
 
-import { useState, useCallback }from "react";
+import { useState, useCallback } from "react";
 import { collection, getDocs, query, where, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { getFirebase } from "@/lib/firebase";
-import { useAuth } from "./useAuth";
 import { useToast } from "./use-toast";
 import { FirestorePermissionError } from "@/lib/errors";
 import { errorEmitter } from "@/lib/error-emitter";
+import { useAdminAuth } from "./useAdminAuth";
 
 interface AppUser {
     id: string;
@@ -19,14 +18,19 @@ interface AppUser {
 }
 
 export function useUsers() {
-  const { user } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { db } = getFirebase();
   const { toast } = useToast();
   const [users, setUsers] = useState<AppUser[]>([]);
   const [loading, setLoading] = useState(false);
 
   const searchUsers = useCallback(async (emailToSearch: string) => {
-    if (user && db && user.email === "andersoncmp1@gmail.com" && emailToSearch) {
+    if (adminLoading) {
+      // Aguarde a verificação do admin terminar
+      return;
+    }
+
+    if (isAdmin && db && emailToSearch) {
       setLoading(true);
       setUsers([]);
       const usersColRef = collection(db, "users");
@@ -68,9 +72,15 @@ export function useUsers() {
             title: "Campo obrigatório",
             description: "Por favor, digite um email para realizar a busca.",
         });
+      } else if (!isAdmin) {
+         toast({
+            variant: "destructive",
+            title: "Acesso Negado",
+            description: "Você não tem permissão para realizar esta busca.",
+        });
       }
     }
-  }, [user, db, toast]);
+  }, [isAdmin, adminLoading, db, toast]);
 
   return { users, loading, searchUsers };
 }
