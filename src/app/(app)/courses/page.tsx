@@ -129,7 +129,7 @@ export default function CoursesPage() {
 
     if (course.isLocked) {
       return (
-        <TooltipProvider>
+        <TooltipProvider key={course.id}>
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="block group">{cardContent}</div>
@@ -143,7 +143,7 @@ export default function CoursesPage() {
     }
 
     return (
-      <Link href={course.href} className="block group">
+      <Link href={course.href} className="block group" key={course.id}>
         {cardContent}
       </Link>
     );
