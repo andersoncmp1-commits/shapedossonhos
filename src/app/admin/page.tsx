@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -21,8 +20,11 @@ export default function AdminPage() {
   
   useEffect(() => {
     async function fetchUsers() {
-      // Don't fetch if auth is still loading or if there's no user
-      if (authLoading || !user) {
+      if (authLoading) {
+        return;
+      }
+      
+      if (!user) {
         setLoading(false);
         setIsAdmin(false);
         return;
