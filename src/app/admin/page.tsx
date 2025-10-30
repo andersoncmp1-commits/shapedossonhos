@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -52,7 +51,7 @@ export default function AdminPage() {
             console.error("Failed to fetch users. Status:", response.status, body);
             setError(`Status ${response.status}: ${body}`);
              try {
-                const errorData = await response.json();
+                const errorData = JSON.parse(body);
                 console.error("Error payload:", errorData);
             } catch {
                 console.error("Could not parse error response body.");
