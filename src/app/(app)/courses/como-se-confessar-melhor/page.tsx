@@ -3,9 +3,17 @@
 
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 
 export default function FunctionalExercisesPage() {
   const workouts = [
@@ -16,6 +24,7 @@ export default function FunctionalExercisesPage() {
       imageUrl: 'https://i.imgur.com/Xmlk7Ua.png',
       imageHint: 'person stretching',
       href: '/courses/exercicios-funcionais/alongamento-start',
+      isLocked: false,
     },
     {
       id: 'mobilidade-plena',
@@ -24,6 +33,7 @@ export default function FunctionalExercisesPage() {
       imageUrl: 'https://i.imgur.com/k2phSu5.png',
       imageHint: 'yoga pose',
       href: '/courses/exercicios-funcionais/mobilidade-plena',
+      isLocked: false,
     },
     {
       id: 'bumbum-redondinho',
@@ -32,6 +42,7 @@ export default function FunctionalExercisesPage() {
       imageUrl: 'https://i.imgur.com/YMHBOl9.png',
       imageHint: 'leg workout',
       href: '/courses/exercicios-funcionais/bumbum-redondinho',
+      isLocked: false,
     },
     {
       id: 'treino-para-gestantes',
@@ -40,6 +51,7 @@ export default function FunctionalExercisesPage() {
       imageUrl: 'https://i.imgur.com/zSnZZil.png',
       imageHint: 'pregnant woman exercising',
       href: '/courses/exercicios-funcionais/treino-para-gestantes',
+      isLocked: false,
     },
     {
       id: 'queimando-em-casa',
@@ -48,8 +60,70 @@ export default function FunctionalExercisesPage() {
       imageUrl: 'https://i.imgur.com/WIxBIFt.png',
       imageHint: 'high intensity workout',
       href: '/courses/exercicios-funcionais/queimando-em-casa',
+      isLocked: false,
+    },
+    {
+      id: 'treino-com-danca',
+      title: 'Treino com Dança',
+      description: 'Liberado em 2 dias',
+      imageUrl: 'https://i.imgur.com/Z5z4Jj5.png',
+      imageHint: 'dance workout',
+      href: '#',
+      isLocked: true,
     },
   ];
+
+  const renderWorkoutCard = (workout: (typeof workouts)[0]) => {
+    const cardContent = (
+      <Card className={cn(
+        "relative overflow-hidden rounded-lg transition-all duration-300", 
+        workout.isLocked 
+          ? "cursor-not-allowed" 
+          : "cursor-pointer group-hover:shadow-primary/20 group-hover:shadow-lg group-hover:-translate-y-1"
+      )}>
+        <Image
+          src={workout.imageUrl}
+          alt={`Capa do plano ${workout.title}`}
+          width={1080}
+          height={1920}
+          className={cn(
+            "object-cover w-full h-full aspect-[9/16]",
+            workout.isLocked && "filter grayscale"
+          )}
+          data-ai-hint={workout.imageHint}
+        />
+        {workout.isLocked && (
+          <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4">
+            <Lock className="h-12 w-12 text-white/80 mb-4" />
+            <p className="text-white font-bold text-center font-headline">{workout.title}</p>
+            <p className="text-white/80 text-sm text-center font-display">{workout.description}</p>
+          </div>
+        )}
+      </Card>
+    );
+
+    if (workout.isLocked) {
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="block group">{cardContent}</div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Conteúdo será liberado em 2 dias</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    }
+
+    return (
+      <Link href={workout.href} className="block group">
+        {cardContent}
+      </Link>
+    );
+  };
+
 
   return (
     <div>
@@ -70,21 +144,7 @@ export default function FunctionalExercisesPage() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {workouts.map((workout) => (
-           <Link key={workout.id} href={workout.href} className="block group">
-            <Card className="relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 
-                             group-hover:shadow-primary/20 group-hover:shadow-lg group-hover:-translate-y-1">
-              <Image
-                src={workout.imageUrl}
-                alt={`Capa do plano ${workout.title}`}
-                width={1080}
-                height={1920}
-                className="object-cover w-full h-full aspect-[9/16]"
-                data-ai-hint={workout.imageHint}
-              />
-            </Card>
-          </Link>
-        ))}
+        {workouts.map(renderWorkoutCard)}
       </div>
     </div>
   );
