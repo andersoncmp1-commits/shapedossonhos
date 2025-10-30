@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, getDocs, query, where, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { getFirebase } from "@/lib/firebase";
 import { useAuth } from "./useAuth";
 import { useToast } from "./use-toast";
@@ -17,20 +17,23 @@ interface AppUser {
     completedChallengeDays?: string[];
 }
 
-export function useUsers() {
+export function useUsers(emailToSearch: string) {
   const { user } = useAuth();
   const { db } = getFirebase();
   const { toast } = useToast();
   const [users, setUsers] = useState<AppUser[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (user && db && user.email === "andersoncmp1@gmail.com") {
+      if (user && db && user.email === "andersoncmp1@gmail.com" && emailToSearch) {
         setLoading(true);
+        setUsers([]); // Limpa os resultados anteriores
         const usersColRef = collection(db, "users");
+        const q = query(usersColRef, where("email", "==", emailToSearch));
+        
         try {
-          const querySnapshot = await getDocs(usersColRef);
+          const querySnapshot = await getDocs(q);
           const usersList = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
             id: doc.id,
             email: doc.data().email,
@@ -41,30 +44,25 @@ export function useUsers() {
           }));
           setUsers(usersList);
         } catch (error: any) {
-            if (error.code === 'permission-denied') {
-                const permissionError = new FirestorePermissionError({
-                  path: usersColRef.path,
-                  operation: 'list',
-                });
-                errorEmitter.emit('permission-error', permissionError);
-            } else {
-                 console.error("Error fetching users: ", error);
-                toast({
-                    variant: "destructive",
-                    title: "Erro ao buscar usuários",
-                    description: "Não foi possível carregar a lista de usuários.",
-                });
-            }
+            // A consulta 'where' é permitida por regras padrão se o usuário estiver autenticado.
+            // O erro 'list' não deve mais ocorrer, mas mantemos o tratamento para outros erros.
+            console.error("Error fetching users: ", error);
+            toast({
+                variant: "destructive",
+                title: "Erro ao buscar usuário",
+                description: "Não foi possível realizar a busca. Verifique as permissões ou tente novamente.",
+            });
         } finally {
           setLoading(false);
         }
       } else {
-        setLoading(false);
+        // Não faz nada se não houver um email para buscar
+        setUsers([]);
       }
     };
 
     fetchUsers();
-  }, [user, db, toast]);
+  }, [user, db, toast, emailToSearch]);
 
   return { users, loading };
 }

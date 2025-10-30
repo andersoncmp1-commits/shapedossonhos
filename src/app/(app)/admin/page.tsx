@@ -1,21 +1,52 @@
 "use client";
 
+import { useState } from "react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useUsers } from "@/hooks/useUsers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Loader } from "@/components/ui/loader";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
   useAdminAuth();
-  const { users, loading } = useUsers();
+  const [searchEmail, setSearchEmail] = useState("");
+  const [submittedEmail, setSubmittedEmail] = useState("");
+  const { users, loading } = useUsers(submittedEmail);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittedEmail(searchEmail);
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
+      
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Buscar Usuário</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSearch} className="flex gap-2">
+            <Input
+              type="email"
+              placeholder="Digite o email do usuário"
+              value={searchEmail}
+              onChange={(e) => setSearchEmail(e.target.value)}
+              className="flex-grow"
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? <Loader className="h-4 w-4" /> : "Buscar"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
-          <CardTitle>Usuários Cadastrados</CardTitle>
+          <CardTitle>Usuários Encontrados</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -34,15 +65,23 @@ export default function AdminPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.email}</TableCell>
-                    <TableCell>{user.completedModules?.length || 0}</TableCell>
-                    <TableCell>{user.completedConfessionLessons?.length || 0}</TableCell>
-                    <TableCell>{user.completedWorkoutLessons?.length || 0}</TableCell>
-                    <TableCell>{user.completedChallengeDays?.length || 0}</TableCell>
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.email}</TableCell>
+                      <TableCell>{user.completedModules?.length || 0}</TableCell>
+                      <TableCell>{user.completedConfessionLessons?.length || 0}</TableCell>
+                      <TableCell>{user.completedWorkoutLessons?.length || 0}</TableCell>
+                      <TableCell>{user.completedChallengeDays?.length || 0}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center h-24">
+                      {submittedEmail ? `Nenhum usuário encontrado para "${submittedEmail}"` : "Digite um email para buscar um usuário."}
+                    </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           )}
