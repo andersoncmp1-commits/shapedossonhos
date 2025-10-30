@@ -1,65 +1,65 @@
 
-"use client";
-
-import { useState } from "react";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { useUsers } from "@/hooks/useUsers";
+import { cookies } from 'next/headers';
+import { initializeApp, getApps, App } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore, Firestore } from 'firebase-admin/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader } from "@/components/ui/loader";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { AppUser } from "@/hooks/useUsers";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ShieldAlert } from "lucide-react";
+import type { AppUser } from "@/hooks/useUsers";
+import { AdminUserEditor } from './AdminUserEditor';
 
-export default function AdminPage() {
-  const { isAdmin, loading: adminLoading } = useAdminAuth();
-  const { users, loading: usersLoading, updateUser, searchUsers, clearUsers } = useUsers();
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
-  const [editedUser, setEditedUser] = useState<Partial<AppUser>>({});
-  const [searchEmail, setSearchEmail] = useState("");
+// --- INICIALIZAÇÃO DO FIREBASE ADMIN ---
+let adminApp: App;
+let adminAuth: ReturnType<typeof getAuth>;
+let adminDb: Firestore;
 
-  const openEditDialog = (user: AppUser) => {
-    setSelectedUser(user);
-    setEditedUser({ email: user.email, role: user.role });
-    setIsEditDialogOpen(true);
-  };
+if (!getApps().length) {
+  adminApp = initializeApp({
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  });
+} else {
+  adminApp = getApps()[0];
+}
 
-  const handleUpdateUser = async () => {
-    if (selectedUser && editedUser) {
-      await updateUser(selectedUser.id, editedUser);
-      setIsEditDialogOpen(false);
-      setSelectedUser(null);
-      if (searchEmail) {
-        handleSearch(new Event('submit') as unknown as React.FormEvent);
-      }
+adminAuth = getAuth(adminApp);
+adminDb = getFirestore(adminApp);
+
+async function verifyAdminAndFetchUsers(): Promise<{ isAdmin: boolean; users: AppUser[] }> {
+    const cookieStore = cookies();
+    const idToken = cookieStore.get('firebaseIdToken')?.value;
+
+    if (!idToken) {
+        return { isAdmin: false, users: [] };
     }
-  };
+
+    try {
+        const decodedToken = await adminAuth.verifyIdToken(idToken);
+        const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
+
+        if (userDoc.exists && userDoc.data()?.role === 'admin') {
+            // Se for admin, buscar todos os usuários
+            const usersSnapshot = await adminDb.collection('users').get();
+            const users = usersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            } as AppUser));
+            return { isAdmin: true, users };
+        }
+        
+        return { isAdmin: false, users: [] };
+
+    } catch (error) {
+        console.error("Error verifying admin token or fetching users:", error);
+        return { isAdmin: false, users: [] };
+    }
+}
+
+
+export default async function AdminPage() {
+  const { isAdmin, users } = await verifyAdminAndFetchUsers();
   
-  const handleSearch = (e: React.FormEvent) => {
-      e.preventDefault();
-      if(searchEmail) {
-          searchUsers(searchEmail);
-      } else {
-          clearUsers();
-      }
-  }
-
-  const loading = adminLoading || usersLoading;
-
-  if (loading) {
-     return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <Loader className="h-8 w-8 text-primary" />
-        </div>
-     );
-  }
-
   if (!isAdmin) {
       return (
           <div className="max-w-4xl mx-auto">
@@ -78,36 +78,12 @@ export default function AdminPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
-      
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Buscar Usuário</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <Input 
-              type="email"
-              placeholder="Digite o email do usuário"
-              value={searchEmail}
-              onChange={(e) => setSearchEmail(e.target.value)}
-            />
-            <Button type="submit" disabled={loading}>
-              {loading ? <Loader className="h-4 w-4" /> : "Buscar"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader>
           <CardTitle>Usuários</CardTitle>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div className="flex justify-center items-center h-40">
-              <Loader className="h-8 w-8" />
-            </div>
-          ) : (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -125,69 +101,21 @@ export default function AdminPage() {
                       <TableCell>{user.role ?? 'user'}</TableCell>
                       <TableCell>{user.completedChallengeDays?.length || 0}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="outline" size="sm" onClick={() => openEditDialog(user)}>
-                          Editar
-                        </Button>
+                        <AdminUserEditor user={user} />
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell colSpan={4} className="text-center h-24">
-                      Nenhum usuário encontrado. Realize uma busca por e-mail para começar.
+                      Nenhum usuário encontrado.
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
-          )}
         </CardContent>
       </Card>
-
-      {selectedUser && (
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Editar Usuário</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  value={editedUser.email || ""}
-                  onChange={(e) => setEditedUser(prev => ({...prev, email: e.target.value}))}
-                  className="col-span-3"
-                  disabled
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="role" className="text-right">
-                  Role
-                </Label>
-                 <Select
-                  value={editedUser.role || 'user'}
-                  onValueChange={(value) => setEditedUser(prev => ({...prev, role: value as 'admin' | 'user'}))}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Selecione uma role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancelar</Button>
-              <Button onClick={handleUpdateUser}>Salvar Alterações</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
     </div>
   );
 }
