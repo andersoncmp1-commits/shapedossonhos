@@ -10,9 +10,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { AppUser } from "@/hooks/useUsers";
 import { FirestorePermissionError } from "@/lib/errors";
 import { errorEmitter } from "@/lib/error-emitter";
+import type { AppUser } from "@/lib/types";
 
 export function AdminUserEditor({ user }: { user: AppUser }) {
   const { db } = getFirebase();

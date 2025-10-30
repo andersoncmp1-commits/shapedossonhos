@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { initializeApp, getApps } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
-import type { AppUser } from "@/hooks/useUsers";
+import type { AppUser } from "@/lib/types";
 
 // Simplifica a inicialização do Admin SDK.
 // Em ambientes do Google Cloud (como o App Hosting), as credenciais
@@ -44,8 +44,9 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error in /api/users:", error);
-    if (error.code === 'auth/id-token-expired' || error.code === 'auth/argument-error') {
-         return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
+    // Garante que uma mensagem de erro seja enviada em caso de token inválido ou expirado.
+    if (error.code === 'auth/id-token-expired' || error.code === 'auth/argument-error' || error.code === 'auth/invalid-id-token') {
+         return NextResponse.json({ error: 'Unauthorized: Invalid or expired token' }, { status: 401 });
     }
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

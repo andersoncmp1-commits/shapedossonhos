@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -6,10 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ShieldAlert, Loader } from "lucide-react";
-import type { AppUser } from "@/hooks/useUsers";
 import { AdminUserEditor } from './AdminUserEditor';
 import { Header } from '@/components/layout/Header';
 import { useToast } from '@/hooks/use-toast';
+import type { AppUser } from "@/lib/types";
 
 export default function AdminPage() {
   const { user, loading: authLoading } = useAuth();
