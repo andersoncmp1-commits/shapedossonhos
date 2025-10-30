@@ -1,22 +1,27 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps } from 'firebase-admin/app';
+import { initializeApp, getApps, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
 
-// Inicializa o app com o ID do projeto para garantir a autenticação correta.
-if (!getApps().length) {
-  initializeApp({
+// Função para garantir a inicialização singleton do Firebase Admin
+function initializeFirebaseAdmin(): App {
+  if (getApps().length) {
+    return getApps()[0];
+  }
+  // Inicializa com o projectId para garantir que as credenciais do ambiente sejam usadas
+  return initializeApp({
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   });
 }
 
-const adminAuth = getAuth();
-const adminDb = getFirestore();
-
 export async function GET(req: NextRequest) {
   try {
+    const app = initializeFirebaseAdmin();
+    const adminAuth = getAuth(app);
+    const adminDb = getFirestore(app);
+
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       return NextResponse.json({ error: 'Unauthorized: No token provided' }, { status: 401 });
@@ -28,7 +33,8 @@ export async function GET(req: NextRequest) {
     }
 
     const decodedToken = await adminAuth.verifyIdToken(idToken);
-    const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
+    const userDocRef = adminDb.collection('users').doc(decodedToken.uid);
+    const userDoc = await userDocRef.get();
 
     if (!userDoc.exists || userDoc.data()?.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden: User is not an admin' }, { status: 403 });
