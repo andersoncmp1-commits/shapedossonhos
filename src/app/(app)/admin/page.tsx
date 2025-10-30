@@ -7,25 +7,19 @@ import { useUsers } from "@/hooks/useUsers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Loader } from "@/components/ui/loader";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { AppUser } from "@/hooks/useUsers";
 
 export default function AdminPage() {
   useAdminAuth();
-  const [searchEmail, setSearchEmail] = useState("");
-  const { users, loading, searchUsers, updateUser } = useUsers();
+  const { users, loading, updateUser } = useUsers();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
   const [editedUser, setEditedUser] = useState<Partial<AppUser>>({});
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    searchUsers(searchEmail);
-  };
 
   const openEditDialog = (user: AppUser) => {
     setSelectedUser(user);
@@ -38,8 +32,6 @@ export default function AdminPage() {
       await updateUser(selectedUser.id, editedUser);
       setIsEditDialogOpen(false);
       setSelectedUser(null);
-      // Re-run search to show updated data
-      searchUsers(searchEmail);
     }
   };
 
@@ -47,29 +39,9 @@ export default function AdminPage() {
     <div className="max-w-4xl mx-auto">
       <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
       
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Buscar Usuário</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <Input
-              type="email"
-              placeholder="Digite o email do usuário"
-              value={searchEmail}
-              onChange={(e) => setSearchEmail(e.target.value)}
-              className="flex-grow"
-            />
-            <Button type="submit" disabled={loading}>
-              {loading ? <Loader className="h-4 w-4" /> : "Buscar"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
       <Card>
         <CardHeader>
-          <CardTitle>Usuários Encontrados</CardTitle>
+          <CardTitle>Usuários Cadastrados</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -103,7 +75,7 @@ export default function AdminPage() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center h-24">
-                      Nenhum usuário encontrado ou busca não realizada.
+                      Nenhum usuário encontrado.
                     </TableCell>
                   </TableRow>
                 )}
@@ -129,6 +101,7 @@ export default function AdminPage() {
                   value={editedUser.email || ""}
                   onChange={(e) => setEditedUser(prev => ({...prev, email: e.target.value}))}
                   className="col-span-3"
+                  disabled
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -137,7 +110,7 @@ export default function AdminPage() {
                 </Label>
                  <Select
                   value={editedUser.role || 'user'}
-                  onValueChange={(value) => setEditedUser(prev => ({...prev, role: value}))}
+                  onValueChange={(value) => setEditedUser(prev => ({...prev, role: value as 'admin' | 'user'}))}
                 >
                   <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Selecione uma role" />

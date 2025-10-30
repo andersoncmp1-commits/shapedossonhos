@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useCallback } from "react";
-import { collection, getDocs, query, where, QueryDocumentSnapshot, DocumentData, doc, updateDoc } from "firebase/firestore";
+import { useState, useCallback, useEffect } from "react";
+import { collection, getDocs, QueryDocumentSnapshot, DocumentData, doc, updateDoc } from "firebase/firestore";
 import { getFirebase } from "@/lib/firebase";
 import { useToast } from "./use-toast";
 import { FirestorePermissionError } from "@/lib/errors";
@@ -24,21 +24,20 @@ export function useUsers() {
   const { db } = getFirebase();
   const { toast } = useToast();
   const [users, setUsers] = useState<AppUser[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const searchUsers = useCallback(async (emailToSearch: string) => {
-    if (adminLoading) {
-      return;
-    }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (adminLoading || !isAdmin || !db) {
+        if (!adminLoading) setLoading(false);
+        return;
+      }
 
-    if (isAdmin && db && emailToSearch) {
       setLoading(true);
-      setUsers([]);
       const usersColRef = collection(db, "users");
-      const q = query(usersColRef, where("email", "==", emailToSearch));
       
       try {
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(usersColRef);
         const usersList: AppUser[] = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
           id: doc.id,
           email: doc.data().email,
@@ -54,7 +53,7 @@ export function useUsers() {
         if(usersList.length === 0) {
           toast({
             title: "Nenhum usuário encontrado",
-            description: `Nenhum usuário com o email "${emailToSearch}" foi localizado.`,
+            description: "Não há usuários cadastrados no momento.",
           });
         }
       } catch (error: any) {
@@ -63,28 +62,17 @@ export function useUsers() {
             operation: 'list',
           });
           errorEmitter.emit('permission-error', permissionError);
+          setUsers([]);
       } finally {
         setLoading(false);
       }
-    } else {
-      setUsers([]);
-       if (!emailToSearch) {
-        toast({
-            variant: "destructive",
-            title: "Campo obrigatório",
-            description: "Por favor, digite um email para realizar a busca.",
-        });
-      } else if (!isAdmin) {
-         toast({
-            variant: "destructive",
-            title: "Acesso Negado",
-            description: "Você não tem permissão para realizar esta busca.",
-        });
-      }
-    }
+    };
+    
+    fetchUsers();
   }, [isAdmin, adminLoading, db, toast]);
 
-  const updateUser = useCallback(async (userId: string, data: Partial<AppUser>) => {
+
+  const updateUser = useCallback(async (userId: string, data: Partial<Omit<AppUser, 'id'>>) => {
     if (!isAdmin || !db) {
         toast({
             variant: "destructive",
@@ -102,6 +90,8 @@ export function useUsers() {
             title: "Usuário atualizado!",
             description: "Os dados do usuário foram salvos com sucesso.",
         });
+        // Refetch users to show updated data
+        setUsers(prevUsers => prevUsers.map(u => u.id === userId ? { ...u, ...data } : u));
     } catch (error) {
         const permissionError = new FirestorePermissionError({
             path: userDocRef.path,
@@ -114,5 +104,5 @@ export function useUsers() {
     }
   }, [isAdmin, db, toast]);
 
-  return { users, loading, searchUsers, updateUser };
+  return { users, loading, updateUser };
 }
