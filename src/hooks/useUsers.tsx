@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData, doc, updateDoc, query, where } from "firebase/firestore";
+import { useState, useCallback } from "react";
+import { doc, updateDoc } from "firebase/firestore";
 import { getFirebase } from "@/lib/firebase";
 import { useToast } from "./use-toast";
 import { FirestorePermissionError } from "@/lib/errors";
@@ -27,47 +27,47 @@ export function useUsers() {
   const [loading, setLoading] = useState(false);
 
   const searchUsers = useCallback(async (email: string) => {
-    if (adminLoading || !isAdmin || !db || !email) {
+    if (adminLoading || !isAdmin || !email) {
         setUsers([]);
         return;
     }
 
     setLoading(true);
-    const usersColRef = collection(db, "users");
-    const q = query(usersColRef, where("email", "==", email));
-    
     try {
-      const querySnapshot = await getDocs(q);
-      const usersList: AppUser[] = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
-        id: doc.id,
-        email: doc.data().email,
-        role: doc.data().role || 'user',
-        completedModules: doc.data().completedModules || [],
-        completedConfessionLessons: doc.data().completedConfessionLessons || [],
-        completedWorkoutLessons: doc.data().completedWorkoutLessons || [],
-        completedChallengeDays: doc.data().completedChallengeDays || [],
-      }));
-      
-      if (usersList.length === 0) {
-        toast({
-            variant: "destructive",
-            title: "Usuário não encontrado",
-            description: "Nenhum usuário corresponde ao e-mail fornecido.",
-        });
-      }
-      setUsers(usersList);
+        const response = await fetch(`/api/users?email=${encodeURIComponent(email)}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Falha ao buscar usuário.');
+        }
+
+        const data = await response.json();
+        const usersList = data.users;
+
+        if (usersList.length === 0) {
+            toast({
+                variant: "destructive",
+                title: "Usuário não encontrado",
+                description: "Nenhum usuário corresponde ao e-mail fornecido.",
+            });
+        }
+        setUsers(usersList);
 
     } catch (error: any) {
-        const permissionError = new FirestorePermissionError({
-          path: usersColRef.path,
-          operation: 'list', // A 'where' query is a 'list' operation in terms of rules
+        toast({
+            variant: "destructive",
+            title: "Erro ao buscar usuário",
+            description: error.message || "Ocorreu um erro inesperado.",
         });
-        errorEmitter.emit('permission-error', permissionError);
         setUsers([]);
     } finally {
       setLoading(false);
     }
-  }, [isAdmin, adminLoading, db, toast]);
+  }, [isAdmin, adminLoading, toast]);
+
+  const clearUsers = useCallback(() => {
+    setUsers([]);
+  }, []);
 
   const updateUser = useCallback(async (userId: string, data: Partial<Omit<AppUser, 'id'>>) => {
     if (!isAdmin || !db) {
@@ -96,9 +96,6 @@ export function useUsers() {
     }
   }, [isAdmin, db, toast]);
 
-  const refetchUsers = useCallback((email: string) => {
-    searchUsers(email);
-  }, [searchUsers]);
 
-  return { users, loading, updateUser, searchUsers, refetchUsers };
+  return { users, loading, updateUser, searchUsers, clearUsers };
 }

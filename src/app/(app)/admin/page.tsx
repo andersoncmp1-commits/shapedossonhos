@@ -18,7 +18,7 @@ import { ShieldAlert } from "lucide-react";
 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useAdminAuth();
-  const { users, loading: usersLoading, updateUser, searchUsers, refetchUsers } = useUsers();
+  const { users, loading: usersLoading, updateUser, searchUsers, clearUsers } = useUsers();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
   const [editedUser, setEditedUser] = useState<Partial<AppUser>>({});
@@ -35,9 +35,8 @@ export default function AdminPage() {
       await updateUser(selectedUser.id, editedUser);
       setIsEditDialogOpen(false);
       setSelectedUser(null);
-      // After updating, re-run the search to get the fresh data
       if (searchEmail) {
-        searchUsers(searchEmail);
+        handleSearch(new Event('submit') as unknown as React.FormEvent);
       }
     }
   };
@@ -46,12 +45,22 @@ export default function AdminPage() {
       e.preventDefault();
       if(searchEmail) {
           searchUsers(searchEmail);
+      } else {
+          clearUsers();
       }
   }
 
   const loading = adminLoading || usersLoading;
 
-  if (!adminLoading && !isAdmin) {
+  if (loading) {
+     return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <Loader className="h-8 w-8 text-primary" />
+        </div>
+     );
+  }
+
+  if (!isAdmin) {
       return (
           <div className="max-w-4xl mx-auto">
                 <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
@@ -125,7 +134,7 @@ export default function AdminPage() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={4} className="text-center h-24">
-                      Nenhum usuário encontrado. Realize uma busca por e-mail.
+                      Nenhum usuário encontrado. Realize uma busca por e-mail para começar.
                     </TableCell>
                   </TableRow>
                 )}

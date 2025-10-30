@@ -22,8 +22,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { auth } = getFirebase();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      
+      // Store the ID token in a cookie for server-side verification
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          // Set cookie to be used by server components/api routes
+          document.cookie = `firebaseIdToken=${token}; path=/; max-age=3600; samesite=lax`;
+        } catch (error) {
+            console.error("Error getting ID token:", error);
+            document.cookie = 'firebaseIdToken=; path=/; max-age=0';
+        }
+      } else {
+        // Clear the cookie on logout
+        document.cookie = 'firebaseIdToken=; path=/; max-age=0';
+      }
+
       setLoading(false);
     });
 
