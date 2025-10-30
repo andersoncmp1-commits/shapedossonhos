@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     async function fetchUsers() {
@@ -32,6 +33,7 @@ export default function AdminPage() {
       }
 
       setLoading(true);
+      setError(null);
       try {
         const idToken = await user.getIdToken();
         const response = await fetch('/api/users', {
@@ -46,7 +48,9 @@ export default function AdminPage() {
             setIsAdmin(true);
         } else {
             setIsAdmin(false);
-            console.error("Failed to fetch users. Status:", response.status);
+            const body = await response.text();
+            console.error("Failed to fetch users. Status:", response.status, body);
+            setError(`Status ${response.status}: ${body}`);
              try {
                 const errorData = await response.json();
                 console.error("Error payload:", errorData);
@@ -57,6 +61,7 @@ export default function AdminPage() {
       } catch (error) {
         setIsAdmin(false);
         console.error("Error fetching users:", error);
+        setError("Não foi possível carregar a lista de usuários.");
         toast({
           variant: "destructive",
           title: "Erro ao buscar usuários",
@@ -87,6 +92,7 @@ export default function AdminPage() {
             <AlertTitle>Acesso Negado</AlertTitle>
             <AlertDescription>
                 Você não tem permissão para visualizar esta página. Se você acredita que isso é um erro, por favor, entre em contato com o suporte.
+                {error && <pre className="mt-2 whitespace-pre-wrap text-xs bg-muted p-2 rounded">Detalhes: {error}</pre>}
             </AlertDescription>
         </Alert>
        )
