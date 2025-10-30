@@ -4,6 +4,13 @@ import type { AppUser } from '@/lib/types';
 
 export const runtime = 'nodejs'; // Admin SDK precisa de Node
 
+// A importação agora está dentro de um try/catch para lidar com erros de inicialização
+async function getFirebaseAdmin() {
+  const { adminAuth, adminDb, adminApp } = await import('@/lib/firebaseAdmin');
+  return { adminAuth, adminDb, adminApp };
+}
+
+
 function getBearer(req: NextRequest) {
   const h = req.headers.get('authorization') || '';
   const m = h.match(/^Bearer\s+(.+)$/i);
@@ -13,7 +20,7 @@ function getBearer(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     // A importação é feita aqui dentro para garantir que o erro de inicialização seja capturado
-    const { adminAuth, adminDb } = await import('@/lib/firebaseAdmin');
+    const { adminAuth, adminDb } = await getFirebaseAdmin();
 
     const idToken = getBearer(req);
     if (!idToken) {
