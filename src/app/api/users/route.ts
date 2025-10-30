@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeApp, getApps, App } from 'firebase-admin/app';
+import { initializeApp, getApps } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { AppUser } from "@/lib/types";
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     const userDocRef = adminDb.collection('users').doc(decodedToken.uid);
     const userDoc = await userDocRef.get();
 
-    if (!userDoc.exists) {
+    if (!userDoc.exists()) {
         return NextResponse.json({ error: 'Forbidden: User document not found.' }, { status: 403 });
     }
 
