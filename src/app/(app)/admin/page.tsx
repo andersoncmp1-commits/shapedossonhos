@@ -13,13 +13,16 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { AppUser } from "@/hooks/useUsers";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ShieldAlert } from "lucide-react";
 
 export default function AdminPage() {
-  useAdminAuth();
-  const { users, loading, updateUser } = useUsers();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
+  const { users, loading: usersLoading, updateUser, searchUsers } = useUsers();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AppUser | null>(null);
   const [editedUser, setEditedUser] = useState<Partial<AppUser>>({});
+  const [searchEmail, setSearchEmail] = useState("");
 
   const openEditDialog = (user: AppUser) => {
     setSelectedUser(user);
@@ -34,11 +37,54 @@ export default function AdminPage() {
       setSelectedUser(null);
     }
   };
+  
+  const handleSearch = (e: React.FormEvent) => {
+      e.preventDefault();
+      if(searchEmail) {
+          searchUsers(searchEmail);
+      }
+  }
+
+  const loading = adminLoading || usersLoading;
+
+  if (!adminLoading && !isAdmin) {
+      return (
+          <div className="max-w-4xl mx-auto">
+                <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
+                 <Alert variant="destructive">
+                    <ShieldAlert className="h-4 w-4" />
+                    <AlertTitle>Acesso Negado</AlertTitle>
+                    <AlertDescription>
+                        Você não tem permissão para visualizar esta página. Se você acredita que isso é um erro, por favor, entre em contato com o suporte.
+                    </AlertDescription>
+                </Alert>
+          </div>
+      )
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="font-headline text-3xl font-bold tracking-tight mb-8">Painel do Administrador</h1>
       
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Buscar Usuário</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSearch} className="flex gap-2">
+            <Input 
+              type="email"
+              placeholder="Digite o email do usuário"
+              value={searchEmail}
+              onChange={(e) => setSearchEmail(e.target.value)}
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? <Loader className="h-4 w-4" /> : "Buscar"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Usuários Cadastrados</CardTitle>
@@ -101,7 +147,6 @@ export default function AdminPage() {
                   value={editedUser.email || ""}
                   onChange={(e) => setEditedUser(prev => ({...prev, email: e.target.value}))}
                   className="col-span-3"
-                  disabled
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">

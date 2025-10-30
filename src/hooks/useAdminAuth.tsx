@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -17,19 +18,27 @@ export function useAdminAuth() {
     const checkAdminStatus = async () => {
       if (!authLoading) {
         if (!user) {
-          router.replace("/courses");
+          // Se não houver usuário, ele não é admin. Não redirecione, deixe a página decidir.
+          setIsAdmin(false);
+          setLoading(false);
           return;
         }
 
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        
-        if (userDoc.exists() && userDoc.data().role === "admin") {
-          setIsAdmin(true);
-        } else {
-          router.replace("/courses");
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+            
+            if (userDoc.exists() && userDoc.data().role === "admin") {
+              setIsAdmin(true);
+            } else {
+              setIsAdmin(false);
+            }
+        } catch (error) {
+            console.error("Error checking admin status:", error);
+            setIsAdmin(false);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
       }
     };
 
