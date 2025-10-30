@@ -61,11 +61,19 @@ export function RegisterForm() {
       if (user) {
         // Cria o documento do usuário no Firestore
         const userDocRef = doc(db, "users", user.uid);
+
+        // Atribui a role 'admin' se o email for o especificado, senão 'user'
+        const userRole = values.email === 'andersoncmp1@gmail.com' ? 'admin' : 'user';
+
         const userData = {
           email: user.email,
+          role: userRole,
           completedModules: [],
           completedConfessionLessons: [],
+          completedWorkoutLessons: [],
+          completedChallengeDays: [],
         };
+
         await setDoc(userDocRef, userData)
           .catch(serverError => {
             const permissionError = new FirestorePermissionError({
