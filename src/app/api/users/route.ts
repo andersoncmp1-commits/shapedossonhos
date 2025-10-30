@@ -10,28 +10,27 @@ function initializeFirebaseAdmin(): App {
   if (getApps().length) {
     return getApps()[0];
   }
-  // Inicializa com o projectId para garantir que as credenciais do ambiente sejam usadas
   return initializeApp({
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   });
 }
 
 export async function GET(req: NextRequest) {
+  const app = initializeFirebaseAdmin();
+  const adminAuth = getAuth(app);
+  const adminDb = getFirestore(app);
+
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return NextResponse.json({ error: 'Unauthorized: No token provided' }, { status: 401 });
+  }
+  
+  const idToken = authHeader.split('Bearer ')[1];
+  if (!idToken) {
+    return NextResponse.json({ error: 'Unauthorized: Malformed token' }, { status: 401 });
+  }
+
   try {
-    const app = initializeFirebaseAdmin();
-    const adminAuth = getAuth(app);
-    const adminDb = getFirestore(app);
-
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized: No token provided' }, { status: 401 });
-    }
-    
-    const idToken = authHeader.split('Bearer ')[1];
-    if (!idToken) {
-      return NextResponse.json({ error: 'Unauthorized: Malformed token' }, { status: 401 });
-    }
-
     const decodedToken = await adminAuth.verifyIdToken(idToken);
     const userDocRef = adminDb.collection('users').doc(decodedToken.uid);
     const userDoc = await userDocRef.get();
