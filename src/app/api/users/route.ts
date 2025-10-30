@@ -12,10 +12,10 @@ if (!getApps().length) {
   });
 }
 
-const adminAuth = getAuth();
-const adminDb = getFirestore();
-
 export async function GET(req: NextRequest) {
+  const adminAuth = getAuth();
+  const adminDb = getFirestore();
+  
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
     return NextResponse.json({ error: 'Unauthorized: No token provided' }, { status: 401 });
