@@ -12,12 +12,11 @@ import { Button } from "@/components/ui/button";
 export default function AdminPage() {
   useAdminAuth();
   const [searchEmail, setSearchEmail] = useState("");
-  const [submittedEmail, setSubmittedEmail] = useState("");
-  const { users, loading } = useUsers(submittedEmail);
+  const { users, loading, searchUsers } = useUsers();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmittedEmail(searchEmail);
+    searchUsers(searchEmail);
   };
 
   return (
@@ -78,7 +77,7 @@ export default function AdminPage() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center h-24">
-                      {submittedEmail ? `Nenhum usuário encontrado para "${submittedEmail}"` : "Digite um email para buscar um usuário."}
+                      Digite um email para buscar um usuário.
                     </TableCell>
                   </TableRow>
                 )}
