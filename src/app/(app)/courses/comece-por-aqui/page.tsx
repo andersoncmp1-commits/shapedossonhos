@@ -67,6 +67,9 @@ export default function ComecePorAquiPage() {
                       <li>Role para baixo e selecione a opção <span className="font-bold">"Adicionar à Tela de Início"</span>.</li>
                       <li>Confirme o nome do aplicativo e toque em <span className="font-bold">"Adicionar"</span> (<PlusSquare className="inline h-5 w-5" />).</li>
                     </ol>
+                    <div className="mt-6 aspect-video w-full rounded-lg overflow-hidden border">
+                      <iframe src="https://drive.google.com/file/d/1igFqLrbOdGnVo7BsqLVWBqUHUCoIulNl/preview" width="100%" height="100%" allow="autoplay" className='border-0'></iframe>
+                    </div>
                   </div>
                 </div>
               </CardContent>
