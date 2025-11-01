@@ -68,7 +68,17 @@ export default function ComecePorAquiPage() {
                       <li>Confirme o nome do aplicativo e toque em <span className="font-bold">"Adicionar"</span> (<PlusSquare className="inline h-5 w-5" />).</li>
                     </ol>
                     <div className="mt-6 aspect-video w-full rounded-lg overflow-hidden border">
-                      <iframe src="https://drive.google.com/file/d/1igFqLrbOdGnVo7BsqLVWBqUHUCoIulNl/preview" width="100%" height="100%" allow="autoplay" className='border-0'></iframe>
+                      <iframe 
+                        width="100%" 
+                        height="100%" 
+                        src="https://www.youtube.com/embed/yTl3qTeXCHs" 
+                        title="Como Instalar o app no iPhone" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerPolicy="strict-origin-when-cross-origin" 
+                        allowFullScreen
+                        className='border-0'>
+                      </iframe>
                     </div>
                   </div>
                 </div>
