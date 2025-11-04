@@ -1,8 +1,26 @@
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthContext';
+import { Cinzel_Decorative, Playfair_Display, Inter } from 'next/font/google';
+import { cn } from '@/lib/utils';
 import './globals.css';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
+
+const fontBody = Inter({
+  subsets: ['latin'],
+  variable: '--font-body',
+});
+
+const fontHeadline = Cinzel_Decorative({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-headline',
+});
+
+const fontDisplay = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-display',
+});
 
 export const metadata: Metadata = {
   title: 'Shape dos Sonhos',
@@ -16,14 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#deaa2c" />
-      </head>
-      <body className="font-body antialiased" suppressHydrationWarning>
+      <body className={cn("font-body antialiased", fontBody.variable, fontHeadline.variable, fontDisplay.variable)} suppressHydrationWarning>
         <AuthProvider>
           {children}
           <Toaster />
