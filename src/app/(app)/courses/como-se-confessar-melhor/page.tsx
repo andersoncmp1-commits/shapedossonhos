@@ -66,11 +66,11 @@ export default function FunctionalExercisesPage() {
     {
       id: 'treino-com-danca',
       title: 'Treino com Dança',
-      description: 'Liberado em 2 dias',
+      description: 'Divirta-se e queime calorias com aulas de dança energizantes.',
       imageUrl: 'https://i.imgur.com/AEktoBL.png',
       imageHint: 'dance workout',
-      href: '#',
-      isLocked: true,
+      href: '/courses/exercicios-funcionais/treino-com-danca',
+      isLocked: false,
     },
   ];
 
