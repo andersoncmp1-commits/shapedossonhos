@@ -148,7 +148,11 @@ export default function FunctionalExercisesPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {workouts.map(renderWorkoutCard)}
+            {workouts.map((workout) => (
+                <div key={workout.id}>
+                    {renderWorkoutCard(workout)}
+                </div>
+            ))}
         </div>
         </div>
       </main>
