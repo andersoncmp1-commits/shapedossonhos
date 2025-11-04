@@ -5,8 +5,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -26,16 +24,8 @@ import { Loader } from "@/components/ui/loader";
 import { errorEmitter } from "@/lib/error-emitter";
 import { FirestorePermissionError } from "@/lib/errors";
 
-const formSchema = z
-  .object({
-    email: z.string().email({ message: "Por favor, insira um email válido." }),
-    password: z.string().min(6, { message: "A senha deve ter no mínimo 6 caracteres." }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "As senhas não coincidem.",
-    path: ["confirmPassword"],
-  });
+// Removida a validação com Zod para simplificar e corrigir o build
+// A validação de confirmação de senha será feita manualmente
 
 export function RegisterForm() {
   const router = useRouter();
@@ -43,8 +33,7 @@ export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { auth, db } = getFirebase();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
     defaultValues: {
       email: "",
       password: "",
@@ -52,7 +41,23 @@ export function RegisterForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: any) {
+    if (values.password !== values.confirmPassword) {
+      form.setError("confirmPassword", {
+        type: "manual",
+        message: "As senhas não coincidem.",
+      });
+      return;
+    }
+    if (values.password.length < 6) {
+      form.setError("password", {
+        type: "manual",
+        message: "A senha deve ter no mínimo 6 caracteres.",
+      });
+      return;
+    }
+
+
     setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
@@ -125,7 +130,7 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel className="font-display">Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="seu@email.com" {...field} />
+                  <Input placeholder="seu@email.com" {...field} type="email" required />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -138,7 +143,7 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel className="font-display">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
+                  <Input type="password" placeholder="••••••••" {...field} required />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -151,7 +156,7 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel className="font-display">Confirmar Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
+                  <Input type="password" placeholder="••••••••" {...field} required />
                 </FormControl>
                 <FormMessage />
               </FormItem>

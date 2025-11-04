@@ -5,8 +5,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 
@@ -24,10 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Loader } from "@/components/ui/loader";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Por favor, insira um email válido." }),
-  password: z.string().min(1, { message: "A senha é obrigatória." }),
-});
+// Removida a validação com Zod para simplificar e corrigir o build
 
 export function LoginForm() {
   const router = useRouter();
@@ -35,15 +30,14 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { auth } = getFirebase();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: any) {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
@@ -85,7 +79,7 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel className="font-display">Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="seu@email.com" {...field} />
+                  <Input placeholder="seu@email.com" {...field} type="email" required />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -98,7 +92,7 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel className="font-display">Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
+                  <Input type="password" placeholder="••••••••" {...field} required />
                 </FormControl>
                 <FormMessage />
               </FormItem>

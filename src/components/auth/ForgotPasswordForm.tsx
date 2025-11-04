@@ -4,8 +4,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 import { getFirebase } from "@/lib/firebase";
@@ -22,9 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Loader } from "@/components/ui/loader";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Por favor, insira um email válido." }),
-});
+// Removida a validação com Zod para simplificar e corrigir o build
 
 export function ForgotPasswordForm() {
   const { toast } = useToast();
@@ -32,14 +28,13 @@ export function ForgotPasswordForm() {
   const [isSent, setIsSent] = useState(false);
   const { auth } = getFirebase();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
     defaultValues: {
       email: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: { email: string }) {
     setIsLoading(true);
     try {
       await sendPasswordResetEmail(auth, values.email);
@@ -82,7 +77,7 @@ export function ForgotPasswordForm() {
                   <FormItem>
                     <FormLabel className="font-display">Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="seu@email.com" {...field} />
+                      <Input placeholder="seu@email.com" {...field} type="email" required />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
